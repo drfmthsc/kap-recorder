@@ -25,9 +25,9 @@
   --teal:#7FC1C8; --teal-soft:#1F3437; --amber:#F0B860; --amber-soft:#3A2C14; --red:#F2998F; --red-soft:#3B1E1A;
   --green:#8FD19A; --green-soft:#1D3321; --on-teal:#0E1A1C;
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);font-size:20px}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--ground);color:var(--ink);font-family:'Mukta','Noto Sans Devanagari','Nirmala UI',system-ui,sans-serif;font-size:17px;line-height:1.5}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:'Mukta','Noto Sans Devanagari','Nirmala UI',system-ui,sans-serif;font-size:1rem;line-height:1.5}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--teal);outline-offset:2px}
@@ -47,7 +47,7 @@ header.top p{margin:2px 0 0;color:var(--muted);font-size:.95rem}
 .stat b{display:block;font-size:1.6rem;line-height:1.1}
 .stat span{color:var(--muted);font-size:.9rem}
 .tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
-table{border-collapse:collapse;width:100%;min-width:720px;font-size:.95rem}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:.95rem}
 th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
 th{font-weight:600;color:var(--muted);font-size:.85rem}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
@@ -70,11 +70,11 @@ tr:last-child td{border-bottom:none}
 .progress i{display:block;height:100%;background:var(--teal)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px 20px}
 .domain{color:var(--muted);font-size:.95rem;margin:0 0 6px}
-.qtext{font-size:1.65rem;line-height:1.35;font-weight:600;margin:0 0 22px;text-wrap:pretty}
+.qtext{font-size:2rem;line-height:1.35;font-weight:600;margin:0 0 22px;text-wrap:pretty}
 .opts{display:grid;gap:10px}
 .opts.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.opt{border:2px solid var(--line);background:var(--surface);border-radius:10px;padding:14px 16px;min-height:60px;font-size:1.25rem;font-weight:600;text-align:left;display:flex;gap:12px;align-items:center}
-.opt .k{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.95rem}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:10px;padding:14px 16px;min-height:64px;font-size:1.4rem;font-weight:600;text-align:left;display:flex;gap:12px;align-items:center}
+.opt .k{flex-shrink:0;width:36px;height:36px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.95rem}
 .opt[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft)}
 .opt[aria-pressed="true"] .k{background:var(--teal);border-color:var(--teal);color:var(--on-teal)}
 .qnav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
@@ -95,7 +95,28 @@ h2{font-size:1.25rem;margin:0 0 10px}
 h3{font-size:1.05rem;margin:18px 0 8px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--ground);padding:10px 18px;border-radius:8px;font-weight:600;max-width:90vw}
 textarea.csv{width:100%;min-height:160px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
-@media (max-width:560px){.qtext{font-size:1.35rem}.opt{font-size:1.1rem}.opts.two{grid-template-columns:1fr}.scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.qtext{font-size:1.55rem}.opt{font-size:1.25rem}.opts.two{grid-template-columns:1fr}.scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
+a.call{display:inline-block;margin-left:6px;font-weight:600;color:var(--teal)}
+.sub{display:block;color:var(--muted);font-size:.85rem;font-weight:400}
+.paper{background:#fff;color:#111;border:1px solid var(--line);border-radius:8px;padding:24px;font-size:15px;line-height:1.4}
+.paper h2{color:#111;font-size:20px;margin:0 0 4px}
+.paper table{min-width:0;font-size:14px}
+.paper th,.paper td{border:1px solid #444;padding:6px 8px;color:#111}
+.paper .box{display:inline-block;width:16px;height:16px;border:1.5px solid #111;vertical-align:-3px;margin:0 4px 0 10px}
+.paper .blank{display:inline-block;min-width:150px;border-bottom:1px solid #111;height:18px;vertical-align:bottom}
+.paper .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px;margin:12px 0 16px}
+.paper .hi{font-size:15px}
+.paper .sec{font-weight:700;background:#eee}
+@media print{
+  @page{size:A4;margin:12mm}
+  html{font-size:12pt}
+  body{background:#fff}
+  .noprint,header.top,#toast{display:none!important}
+  .wrap{max-width:none;padding:0}
+  .paper{border:none;padding:0;border-radius:0}
+  .paper tr{break-inside:avoid}
+  .pbreak{break-before:page}
+}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -169,7 +190,7 @@ const sgn=n=>n===null||n===undefined?'–':(n>0?'+':'')+(Math.round(n*10)/10);
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600);}
 
 /* ---------- state ---------- */
-const S={email:'',pending:new Set(),unsub:null,db:null,dbState:'loading',canWrite:true,downloads:null,parts:{},view:'list',sel:null,form:null,lang:'en',csv:null};
+const S={email:'',contacts:{},pending:new Set(),unsub:[],db:null,dbState:'loading',canWrite:true,downloads:null,parts:{},view:'list',sel:null,form:null,lang:'en',csv:null};
 
 function t1Status(p){
   if(p.status==='withdrawn') return {cls:'p-done',txt:'Withdrawn'};
@@ -188,6 +209,8 @@ function render(){
   if(S.view==='exposure') return renderExposure();
   if(S.view==='detail') return renderDetail();
   if(S.view==='export') return renderExport();
+  if(S.view==='pdetails') return renderPDetails();
+  if(S.view==='paper') return renderPaper();
   renderList();
 }
 
@@ -214,7 +237,7 @@ function renderList(){
   let warn='';
   if(S.pending.size) warn=`<p class="note"><strong>${S.pending.size} record${S.pending.size>1?'s':''} waiting to upload.</strong> ${S.pending.size>1?'They are':'It is'} saved on this device and will upload by itself when the internet is back. Don't clear this browser's data until it does.</p>`;
   $app.innerHTML=header('Palliative care KAP study, Oncology OPD, HIMS. Single-arm pre–post, T0 and T1 at 48–72 h.')+warn+
-  `<p class="note"><strong>No names or phone numbers here.</strong> Use the study code only. Keep the code-to-name and phone list on paper, in the locked cabinet.</p>
+  `<p class="note"><strong>Patient details are kept apart from the answers.</strong> Names, UHID and phone numbers download only in the separate contact list. The research CSV carries the study code, age and sex, nothing more.</p>
   <div class="stats">
     <div class="stat"><b>${active.length}</b><span>Enrolled (target 50)</span></div>
     <div class="stat"><b>${t0n}</b><span>T0 done</span></div>
@@ -225,7 +248,7 @@ function renderList(){
   </div>
   <div class="row" style="justify-content:space-between;margin-bottom:12px">
     <button class="btn" data-act="enrol" ${S.dbState!=='ok'||!S.canWrite?'disabled':''}>Enrol new participant and start T0</button>
-    <button class="btn ghost" data-act="export" ${list.length?'':'disabled'}>Export CSV</button>
+    <div class="row"><button class="btn ghost" data-act="paper">Paper questionnaire</button><button class="btn ghost" data-act="export" ${list.length?'':'disabled'}>Export CSV</button></div>
   </div>
   <div class="tablewrap">${list.length?`<table><thead><tr><th>Code</th><th>T0</th><th>Exposure</th><th>T1</th><th class="num">T0 total</th><th class="num">T1 total</th><th class="num">Change</th><th>Actions</th></tr></thead><tbody>${list.map(rowHTML).join('')}</tbody></table>`:
   `<p class="empty">${S.dbState==='loading'?'Loading records…':'No participants yet. Enrol the first one after consent is signed.'}</p>`}</div>
@@ -241,7 +264,9 @@ function rowHTML(p){
   if(can&&p.t0&&!p.exposure) acts+=` <button class="linkbtn" data-act="exposure" data-code="${esc(p.code)}">Record exposure</button>`;
   if(can&&p.t0&&!p.t1) acts+=` <button class="linkbtn" data-act="t1" data-code="${esc(p.code)}">Record T1</button>`;
   if(S.dbState==='ok'&&S.canWrite) acts+=` <button class="linkbtn" style="color:var(--red)" data-act="delete" data-code="${esc(p.code)}">Delete</button>`;
-  return `<tr><td><b>${esc(p.code)}</b>${S.pending.has(p.code)?' <span class="pill p-amber">Not uploaded</span>':''}</td><td>${p.t0?fmtDT(p.t0.at):'–'}</td><td>${exp}</td><td><span class="pill ${st.cls}">${esc(st.txt)}</span></td>
+  const c=S.contacts[p.code]||{};
+  const call=(st.due||st.late)&&c.mobile?`<a class="call" href="tel:${esc(c.mobile.replace(/[^\d+]/g,''))}">Call ${esc(c.mobile)}</a>`:'';
+  return `<tr><td><b>${esc(p.code)}</b>${S.pending.has(p.code)?' <span class="pill p-amber">Not uploaded</span>':''}${c.name?`<span class="sub">${esc(c.name)}</span>`:''}</td><td>${p.t0?fmtDT(p.t0.at):'–'}</td><td>${exp}</td><td><span class="pill ${st.cls}">${esc(st.txt)}</span>${call}</td>
   <td class="num">${s0?.total??'–'}</td><td class="num">${s1?.total??'–'}</td><td class="num">${sgn(ch)}</td><td>${acts}</td></tr>`;
 }
 
@@ -315,7 +340,12 @@ function renderDetail(){
   const lab=(it,v)=>v===undefined?'–':v===SKIP?'Skipped':(OPTS[it.type].en.find(o=>String(o[0])===String(v))||[,''])[1];
   const meta=t=>t?`${fmtDT(t.at)}, ${t.mode}, by ${esc(t.by)}, in ${t.lang==='hi'?'Hindi':'English'}`:'Not done';
   const can=S.dbState==='ok'&&S.canWrite;
+  const c=S.contacts[p.code]||{}, dm=p.demo||{};
   $app.innerHTML=header(`${esc(p.code)}${p.status==='withdrawn'?' · withdrawn':''}`)+`<div class="card">
+  <h3 style="margin-top:0">Patient details</h3>
+  <p>${c.name?`<b>${esc(c.name)}</b>`:'<span class="pill p-amber">No details saved</span>'}${dm.age?`, ${esc(dm.age)} years`:''}${dm.sex?`, ${esc(dm.sex)}`:''}${c.uhid?`<br>UHID / CR no.: ${esc(c.uhid)}`:''}${c.mobile?`<br>Mobile: <a class="call" style="margin:0" href="tel:${esc(c.mobile.replace(/[^\d+]/g,''))}">${esc(c.mobile)}</a>`:''}${c.altMobile?`<br>Relative's mobile: <a class="call" style="margin:0" href="tel:${esc(c.altMobile.replace(/[^\d+]/g,''))}">${esc(c.altMobile)}</a>`:''}</p>
+  ${can?`<div class="row"><button class="btn ghost" data-act="editdetails">${c.name?'Edit patient details':'Add patient details'}</button>${c.name?'<button class="btn danger" data-act="deldetails">Delete patient details</button>':''}</div>`:''}
+  <h3>Responses</h3>
   <p><b>T0:</b> ${meta(p.t0)}<br><b>T1:</b> ${meta(p.t1)}${p.t0&&p.t1?` (${Math.round((p.t1.at-p.t0.at)/H)} h after T0)`:''}</p>
   <div class="tablewrap"><table><thead><tr><th>Item</th><th>Statement</th><th>T0</th><th>T1</th></tr></thead><tbody>
   ${ITEMS.map(it=>`<tr><td><b>${it.id}</b></td><td>${esc(it.en)}</td><td>${esc(lab(it,p.t0?.ans?.[it.id]))}</td><td>${esc(lab(it,p.t1?.ans?.[it.id]))}</td></tr>`).join('')}
@@ -337,9 +367,95 @@ function renderDetail(){
   </div>`;
 }
 
+/* ---------- patient details ---------- */
+function renderPDetails(){
+  const code=S.form.code, c=S.contacts[code]||{}, dm=S.parts[code]?.demo||{};
+  const sexBtn=v=>`<button data-act="sex" data-v="${v}" aria-pressed="${dm.sex===v}">${v}</button>`;
+  $app.innerHTML=header(`${esc(code)} · Patient details`)+`<div class="card">
+  <div class="fgrid">
+    <label class="f">Patient's name<input id="d-name" autocomplete="off" value="${esc(c.name)}"></label>
+    <label class="f">UHID / CR number<input id="d-uhid" autocomplete="off" value="${esc(c.uhid)}"></label>
+    <label class="f">Mobile number<input id="d-mob" type="tel" inputmode="tel" autocomplete="off" value="${esc(c.mobile)}" placeholder="10-digit number"></label>
+    <label class="f">Relative's mobile (optional)<input id="d-alt" type="tel" inputmode="tel" autocomplete="off" value="${esc(c.altMobile)}"></label>
+    <label class="f">Age in years<input id="d-age" type="number" inputmode="numeric" min="18" max="110" value="${esc(dm.age)}"></label>
+    <div class="f" style="display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.95rem">Sex<div class="seg" role="group" aria-label="Sex">${sexBtn('Male')}${sexBtn('Female')}${sexBtn('Other')}</div></div>
+  </div>
+  <p style="color:var(--muted);margin:14px 0 0">The mobile number is used to call for the T1 follow-up. It never appears in the research CSV.</p>
+  <div class="qnav">${S.form.then==='t0'?'<button class="linkbtn" data-act="skipdetails">Fill details later</button>':'<button class="btn ghost" data-act="detailback">Cancel</button>'}<button class="btn" data-act="savedetails">${S.form.then==='t0'?'Save and start T0':'Save details'}</button></div></div>`;
+}
+async function saveDetails(btn){
+  const g=id=>document.getElementById(id).value.trim();
+  const code=S.form.code, name=g('d-name'), uhid=g('d-uhid'), mobile=g('d-mob'), altMobile=g('d-alt'), age=g('d-age');
+  const sex=document.querySelector('[data-act="sex"][aria-pressed="true"]')?.dataset.v||'';
+  const digits=x=>x.replace(/\D/g,'').replace(/^91(?=\d{10}$)/,'').replace(/^0(?=\d{10}$)/,'');
+  if(!name){toast("Enter the patient's name.");document.getElementById('d-name').focus();return;}
+  if(mobile&&digits(mobile).length!==10){toast('The mobile number should have 10 digits.');document.getElementById('d-mob').focus();return;}
+  if(altMobile&&digits(altMobile).length!==10){toast("The relative's mobile should have 10 digits.");document.getElementById('d-alt').focus();return;}
+  if(age&&(isNaN(+age)||+age<18||+age>110)){toast('Age should be between 18 and 110.');return;}
+  btn.disabled=true;
+  const cw=S.db.doc('contacts/'+code).set({code,name,uhid,mobile:mobile?digits(mobile):'',altMobile:altMobile?digits(altMobile):'',updatedAt:Date.now()});
+  cw.catch(onWriteError);
+  S.contacts[code]={code,name,uhid,mobile:mobile?digits(mobile):'',altMobile:altMobile?digits(altMobile):''};
+  const p=S.parts[code]||{code,status:'active'};
+  const ok=await put(code,{...p,demo:{age:age?Number(age):null,sex}});
+  if(!ok){btn.disabled=false;return;}
+  toast('Patient details saved for '+code);
+  if(S.form.then==='t0') startForm(code,'t0'); else {S.sel=code;S.view='detail';S.form=null;render();}
+}
+
+/* ---------- paper questionnaire ---------- */
+function renderPaper(){
+  const L=OPTS.lik;
+  const itemRows=ITEMS.map(it=>{
+    let ans;
+    if(it.type==='tf') ans=`<span class="box"></span>True / सही<span class="box"></span>False / गलत`;
+    else if(it.type==='yn') ans=`<span class="box"></span>Yes / हाँ<span class="box"></span>No / नहीं`;
+    else ans=L.en.map(([v],i)=>`<span class="box"></span>${v}`).join('');
+    return `<tr><td><b>${it.id}</b></td><td>${esc(it.en)}<div class="hi" lang="hi">${esc(it.hi)}</div></td><td style="white-space:nowrap">${ans}</td></tr>`;
+  }).join('');
+  const likKey=L.en.map(([v,t],i)=>`${v} = ${t} / <span lang="hi">${L.hi[i][1]}</span>`).join('; ');
+  const accRow=`<tr><td><b>ACC</b></td><td>${esc(ACCEPT.en)}<div class="hi" lang="hi">${esc(ACCEPT.hi)}</div><div style="font-size:13px;margin-top:4px">${ACCEPT.opts.en.map((t,i)=>`${i+1} = ${t}`).join('; ')}</div></td><td style="white-space:nowrap">${[1,2,3,4,5].map(v=>`<span class="box"></span>${v}`).join('')}</td></tr>`;
+  $app.innerHTML=header('Paper questionnaire')+`
+  <div class="noprint card" style="margin-bottom:16px"><p style="margin:0 0 10px">Print this, or save it as a PDF to keep on the phone. Use it when the internet is down. Enter the answers in the tool later, and set the interview's real date and time on the first screen.</p>
+  <div class="row"><button class="btn" data-act="print">Print or save as PDF</button></div></div>
+  <div class="paper">
+    <h2>KAP Questionnaire: Palliative / Supportive Care</h2>
+    <div>Oncology OPD, HIMS, SRHU, Dehradun</div>
+    <div class="meta">
+      <div>Study code: <span class="blank"></span></div>
+      <div>Timepoint:<span class="box"></span>T0 (before video)<span class="box"></span>T1 (48–72 h)</div>
+      <div>Date: <span class="blank" style="min-width:110px"></span> Time: <span class="blank" style="min-width:70px"></span></div>
+      <div>Mode:<span class="box"></span>In person<span class="box"></span>By phone</div>
+      <div>Language used:<span class="box"></span>English<span class="box"></span>Hindi</div>
+      <div>Interviewer initials: <span class="blank" style="min-width:80px"></span></div>
+    </div>
+    <table><tbody>
+      <tr class="sec"><td colspan="3">Patient details (T0 only; leave blank at T1)</td></tr>
+      <tr><td colspan="3">Name: <span class="blank" style="min-width:260px"></span>&nbsp; UHID / CR no.: <span class="blank"></span></td></tr>
+      <tr><td colspan="3">Mobile: <span class="blank"></span>&nbsp; Relative's mobile: <span class="blank"></span></td></tr>
+      <tr><td colspan="3">Age: <span class="blank" style="min-width:60px"></span> years &nbsp; Sex:<span class="box"></span>Male<span class="box"></span>Female<span class="box"></span>Other</td></tr>
+    </tbody></table>
+    <p style="margin:14px 0 6px">Read each statement exactly as written. Tick one box. If the participant chooses not to answer, write "skip".</p>
+    <table>
+      <thead><tr><th style="width:52px">Item</th><th>Statement / कथन</th><th>Answer</th></tr></thead>
+      <tbody>
+        <tr class="sec"><td colspan="3">Knowledge / ज्ञान</td></tr>
+        ${itemRows.split('</tr>').slice(0,3).join('</tr>')}</tr>
+        <tr class="sec"><td colspan="3">Attitude / दृष्टिकोण &nbsp; <span style="font-weight:400;font-size:13px">${likKey}</span></td></tr>
+        ${itemRows.split('</tr>').slice(3,6).join('</tr>')}</tr>
+        <tr class="sec"><td colspan="3">Practice / intent / व्यवहार / इरादा</td></tr>
+        ${itemRows.split('</tr>').slice(6,9).join('</tr>')}</tr>
+        <tr class="sec"><td colspan="3">T1 only: acceptability</td></tr>
+        ${accRow}
+      </tbody>
+    </table>
+    <p style="margin-top:12px;font-size:13px">Hindi wording is a draft, pending forward and back-translation.</p>
+  </div>`;
+}
+
 /* ---------- CSV ---------- */
 function buildCSV(){
-  const cols=['code','status','t0_datetime','t0_mode','t0_by','t0_lang',...ITEMS.map(i=>'t0_'+i.id),'t0_K','t0_A','t0_P','t0_total','t0_missing',
+  const cols=['code','status','age','sex','t0_datetime','t0_mode','t0_by','t0_lang',...ITEMS.map(i=>'t0_'+i.id),'t0_K','t0_A','t0_P','t0_total','t0_missing',
     'exp_video','exp_qpl_offered','exp_qpl_accepted','exp_requested_discussion','exp_notes',
     't1_datetime','t1_hours_after_t0','t1_in_window','t1_mode','t1_by','t1_lang',...ITEMS.map(i=>'t1_'+i.id),'t1_K','t1_A','t1_P','t1_total','t1_missing','t1_acceptability',
     'chg_K','chg_A','chg_P','chg_total'];
@@ -350,16 +466,24 @@ function buildCSV(){
     const s0=p.t0?score(p.t0.ans):{}, s1=p.t1?score(p.t1.ans):{}, e=p.exposure||{};
     const h=p.t0&&p.t1?(p.t1.at-p.t0.at)/H:null;
     const d=k=>(s0[k]!=null&&s1[k]!=null)?s1[k]-s0[k]:'';
-    return [p.code,p.status||'active',iso(p.t0?.at),p.t0?.mode,p.t0?.by,p.t0?.lang,...ITEMS.map(i=>raw(i,p.t0?.ans?.[i.id])),s0.K,s0.A,s0.P,s0.total,p.t0?s0.missing:'',
+    return [p.code,p.status||'active',p.demo?.age??'',p.demo?.sex??'',iso(p.t0?.at),p.t0?.mode,p.t0?.by,p.t0?.lang,...ITEMS.map(i=>raw(i,p.t0?.ans?.[i.id])),s0.K,s0.A,s0.P,s0.total,p.t0?s0.missing:'',
       e.video,e.qplOffered,e.qplAccepted,e.discussion,e.notes,
       iso(p.t1?.at),h===null?'':h.toFixed(1),h===null?'':(h>=48&&h<=72?1:0),p.t1?.mode,p.t1?.by,p.t1?.lang,...ITEMS.map(i=>raw(i,p.t1?.ans?.[i.id])),s1.K,s1.A,s1.P,s1.total,p.t1?s1.missing:'',p.t1?(p.t1.acc===SKIP?'':p.t1.acc):'',
       d('K'),d('A'),d('P'),d('total')].map(q).join(',');
   });
   return [cols.join(','),...rows].join('\n');
 }
+function buildContactsCSV(){
+  const q=v=>{v=v===null||v===undefined?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const rows=Object.values(S.parts).sort((a,b)=>a.code.localeCompare(b.code)).map(p=>{const c=S.contacts[p.code]||{};return [p.code,c.name,c.uhid,c.mobile,c.altMobile,p.demo?.age,p.demo?.sex,p.status||'active'].map(q).join(',');});
+  return ['code,name,uhid_cr_no,mobile,relative_mobile,age,sex,status',...rows].join('\n');
+}
+function saveFile(name,text){const blob=new Blob(['\ufeff'+text],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);}
 function renderExport(){
   $app.innerHTML=header('Export')+`<div class="card"><p>One row per participant. True/False items are coded 1 = True, 0 = False (raw answer, before reverse-scoring K3). Yes/No items are 1 = Yes, 0 = No. Skipped items are blank. Change = T1 minus T0.</p>
-  <div class="row" style="margin:12px 0"><button class="btn" data-act="dl">Download CSV</button><button class="btn ghost" data-act="sel">Select all text</button></div>
+  <div class="row" style="margin:12px 0"><button class="btn" data-act="dl">Download research CSV</button><button class="btn ghost" data-act="sel">Select all text</button></div>
+  <p style="margin-top:18px"><b>Contact list.</b> Names, UHID and phone numbers, linked by study code. Keep this file off GitHub and off shared drives that others can open.</p>
+  <div class="row" style="margin:8px 0 14px"><button class="btn ghost" data-act="dlcontacts">Download contact list</button></div>
   <textarea class="csv" id="csv" readonly aria-label="CSV data">${esc(S.csv)}</textarea></div>`;
 }
 
@@ -382,7 +506,7 @@ async function enrol(){
   let n=(nums.length?Math.max(...nums):0)+1, code;
   for(let i=0;i<20;i++){code='KAP-'+String(n).padStart(3,'0');const s=await S.db.doc('participants/'+code).get();if(!s.exists)break;n++;}
   const ok=await put(code,{code,status:'active',createdAt:Date.now()});
-  if(ok){S.parts[code]=S.parts[code]||{code,status:'active'};toast(code+' enrolled. Write this code on the consent form.');startForm(code,'t0');}
+  if(ok){S.parts[code]=S.parts[code]||{code,status:'active'};toast(code+' enrolled. Write this code on the consent form.');S.form={code,then:'t0'};S.view='pdetails';render();window.scrollTo(0,0);}
 }
 
 /* ---------- events ---------- */
@@ -392,9 +516,18 @@ document.addEventListener('click',async ev=>{
   const keepFields=()=>{const at=document.getElementById('f-at'),by=document.getElementById('f-by');if(at&&at.value)f.at=new Date(at.value).getTime();if(by)f.by=by.value.trim();};
   switch(a){
     case 'home': S.view='list';S.form=null;render();break;
+    case 'detailback': S.view='detail';S.form=null;render();break;
     case 'enrol': b.disabled=true; await enrol(); break;
     case 'export': S.csv=buildCSV();S.view='export';render();break;
-    case 'dl': {const blob=new Blob(['\ufeff'+S.csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kap_data_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);break;}
+    case 'dl': saveFile('kap_data_'+new Date().toISOString().slice(0,10)+'.csv',S.csv);break;
+    case 'dlcontacts': saveFile('kap_contacts_'+new Date().toISOString().slice(0,10)+'.csv',buildContactsCSV());break;
+    case 'paper': S.view='paper';render();window.scrollTo(0,0);break;
+    case 'print': window.print();break;
+    case 'editdetails': S.form={code:S.sel,then:'detail'};S.view='pdetails';render();break;
+    case 'savedetails': await saveDetails(b);break;
+    case 'skipdetails': {const code=S.form.code;startForm(code,'t0');break;}
+    case 'deldetails': if(confirm('Delete the name, UHID and phone numbers for '+S.sel+'? The answers stay.')){try{const dw=S.db.doc('contacts/'+S.sel).delete();await Promise.race([dw,new Promise(r=>setTimeout(r,5000))]);dw.catch(onWriteError);delete S.contacts[S.sel];render();toast('Patient details deleted for '+S.sel);}catch(e){toast('Could not delete.');}}break;
+    case 'sex': {document.querySelectorAll('[data-act="sex"]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));break;}
     case 'signin': {const prov=new firebase.auth.GoogleAuthProvider();try{await firebase.auth().signInWithPopup(prov);}catch(e){if(e?.code==='auth/popup-blocked'||e?.code==='auth/operation-not-supported-in-this-environment')firebase.auth().signInWithRedirect(prov);else if(e?.code!=='auth/popup-closed-by-user'&&e?.code!=='auth/cancelled-popup-request')toast('Sign-in failed: '+(e?.code||'unknown error'));}break;}
     case 'signout': if(S.view==='form'&&!confirm('Sign out? Unsaved answers on this screen will be lost.'))break; await firebase.auth().signOut(); S.view='list';S.form=null; break;
     case 'sel': {const t=document.getElementById('csv');t.focus();t.select();break;}
@@ -430,7 +563,7 @@ document.addEventListener('click',async ev=>{
     case 'withdraw': if(confirm('Mark '+S.sel+' as withdrawn? The record is kept but excluded from counts.')){const p=S.parts[S.sel];if(await put(S.sel,{...p,status:'withdrawn',withdrawnAt:Date.now()}))render();}break;
     case 'reinstate': {const p={...S.parts[S.sel],status:'active'};delete p.withdrawnAt;if(await put(S.sel,p))render();break;}
     case 'delete': {const code=b.dataset.code||S.sel;
-      if(confirm('Delete the whole record for '+code+' (T0, exposure checklist and T1)? This cannot be undone.')){try{const dw=S.db.doc('participants/'+code).delete();await Promise.race([dw,new Promise(r=>setTimeout(r,5000))]);dw.catch(onWriteError);delete S.parts[code];S.view='list';render();toast(code+' deleted');}catch(e){toast('Could not delete. Check the connection and try again.');}}break;}
+      if(confirm('Delete the whole record for '+code+' (patient details, T0, exposure checklist and T1)? This cannot be undone.')){try{const dw=S.db.doc('participants/'+code).delete();const dc=S.db.doc('contacts/'+code).delete();await Promise.race([Promise.all([dw,dc]),new Promise(r=>setTimeout(r,5000))]);dw.catch(onWriteError);dc.catch(()=>{});delete S.parts[code];delete S.contacts[code];S.view='list';render();toast(code+' deleted');}catch(e){toast('Could not delete. Check the connection and try again.');}}break;}
     case 'delpart': {const names={t0:'T0',t1:'T1',exposure:'exposure checklist'};
       const warn=v==='t0'&&S.parts[S.sel]?.t1?' The T1 answers stay, but there will be no change score until T0 is recorded again.':'';
       if(confirm('Delete the '+names[v]+' for '+S.sel+'? This cannot be undone.'+warn)){const p={...S.parts[S.sel]};delete p[v];if(await put(S.sel,p)){S.parts[S.sel]=p;render();toast(names[v]+' deleted for '+S.sel);}}break;}
@@ -451,16 +584,20 @@ render();
   S.db={doc:path=>fs.doc(path)};
   firebase.auth().getRedirectResult().catch(e=>toast('Sign-in failed: '+(e?.code||'unknown error')));
   firebase.auth().onAuthStateChanged(u=>{
-    if(S.unsub){S.unsub();S.unsub=null;}
-    S.parts={};S.pending=new Set();
+    S.unsub.forEach(f=>f());S.unsub=[];
+    S.parts={};S.contacts={};S.pending=new Set();
     if(!u){S.email='';S.dbState='signin';render();return;}
     S.email=u.email||'';S.dbState='loading';render();
-    S.unsub=fs.collection('participants').onSnapshot({includeMetadataChanges:true},snap=>{
+    S.unsub.push(fs.collection('contacts').onSnapshot(snap=>{
+      const next={};snap.docs.forEach(d=>{const v=d.data();if(v)next[d.id]=v;});S.contacts=next;
+      if(S.view==='list'||S.view==='detail')render();
+    },()=>{}));
+    S.unsub.push(fs.collection('participants').onSnapshot({includeMetadataChanges:true},snap=>{
       const next={},pend=new Set();
       snap.docs.forEach(d=>{const v=d.data();if(v&&typeof v.code==='string'){next[d.id]=v;if(d.metadata.hasPendingWrites)pend.add(d.id);}});
       S.parts=next;S.pending=pend;S.dbState='ok';
       if(S.view==='list'||S.view==='detail')render();
-    },err=>{S.dbState=err?.code==='permission-denied'?'denied':'offline';render();});
+    },err=>{S.dbState=err?.code==='permission-denied'?'denied':'offline';render();}));
   });
 })();
 setInterval(()=>{if(S.view==='list')render();},5*60*1000);
