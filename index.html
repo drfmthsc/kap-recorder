@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KAP Recorder: Palliative Care Study, HIMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#F6F4EF; --surface:#FFFFFF; --ink:#1F2A30; --muted:#55626A; --line:#DCD6CB;
+  --teal:#1E5560; --teal-soft:#E3EEEE; --amber:#8A5300; --amber-soft:#FBEFD9; --red:#9B2C22; --red-soft:#F8E3E0;
+  --green:#2E6B3A; --green-soft:#E2F0E3; --on-teal:#FFFFFF;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#141A1C; --surface:#1C2427; --ink:#E8ECEC; --muted:#A3AFB4; --line:#33403F;
+    --teal:#7FC1C8; --teal-soft:#1F3437; --amber:#F0B860; --amber-soft:#3A2C14; --red:#F2998F; --red-soft:#3B1E1A;
+    --green:#8FD19A; --green-soft:#1D3321; --on-teal:#0E1A1C;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#141A1C; --surface:#1C2427; --ink:#E8ECEC; --muted:#A3AFB4; --line:#33403F;
+  --teal:#7FC1C8; --teal-soft:#1F3437; --amber:#F0B860; --amber-soft:#3A2C14; --red:#F2998F; --red-soft:#3B1E1A;
+  --green:#8FD19A; --green-soft:#1D3321; --on-teal:#0E1A1C;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:'Mukta','Noto Sans Devanagari','Nirmala UI',system-ui,sans-serif;font-size:17px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto;padding:20px 18px 48px}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid var(--teal);margin-bottom:18px}
+header.top h1{margin:0;font-size:1.55rem;line-height:1.15;font-weight:700;color:var(--teal)}
+header.top p{margin:2px 0 0;color:var(--muted);font-size:.95rem}
+.btn{border:1px solid var(--teal);background:var(--teal);color:var(--on-teal);border-radius:8px;padding:9px 16px;min-height:44px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn.danger{background:transparent;border-color:var(--red);color:var(--red)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.note{background:var(--amber-soft);color:var(--ink);border-radius:8px;padding:10px 14px;font-size:.95rem;margin:0 0 16px}
+.note strong{color:var(--amber)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.stat b{display:block;font-size:1.6rem;line-height:1.1}
+.stat span{color:var(--muted);font-size:.9rem}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:.95rem}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-weight:600;color:var(--muted);font-size:.85rem}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.85rem;font-weight:600;white-space:nowrap}
+.p-wait{background:var(--teal-soft);color:var(--teal)}
+.p-due{background:var(--green-soft);color:var(--green)}
+.p-late{background:var(--red-soft);color:var(--red)}
+.p-done{background:var(--surface);color:var(--muted);border:1px solid var(--line)}
+.p-amber{background:var(--amber-soft);color:var(--amber)}
+.linkbtn{background:none;border:none;color:var(--teal);font-weight:600;padding:6px 4px;min-height:36px;text-decoration:underline;text-underline-offset:3px}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+/* questionnaire */
+.qhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.qhead .who{font-weight:700;font-size:1.1rem}
+.lang{display:inline-flex;border:1px solid var(--teal);border-radius:8px;overflow:hidden}
+.lang button{border:none;background:transparent;padding:6px 14px;min-height:40px;color:var(--teal);font-weight:600}
+.lang button[aria-pressed="true"]{background:var(--teal);color:var(--on-teal)}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:6px 0 18px}
+.progress i{display:block;height:100%;background:var(--teal)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px 20px}
+.domain{color:var(--muted);font-size:.95rem;margin:0 0 6px}
+.qtext{font-size:1.65rem;line-height:1.35;font-weight:600;margin:0 0 22px;text-wrap:pretty}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:10px;padding:14px 16px;min-height:60px;font-size:1.25rem;font-weight:600;text-align:left;display:flex;gap:12px;align-items:center}
+.opt .k{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.95rem}
+.opt[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft)}
+.opt[aria-pressed="true"] .k{background:var(--teal);border-color:var(--teal);color:var(--on-teal)}
+.qnav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+label.f{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.95rem}
+label.f input,label.f select,label.f textarea{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 11px;min-height:44px;font-weight:400}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:none;background:var(--surface);padding:8px 16px;min-height:44px;font-weight:600}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--teal);color:var(--on-teal)}
+.yn{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.review td:first-child{width:56px;font-weight:700}
+.scores{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0}
+.scores div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--ground)}
+.scores b{display:block;font-size:1.3rem}
+.scores span{font-size:.85rem;color:var(--muted)}
+h2{font-size:1.25rem;margin:0 0 10px}
+h3{font-size:1.05rem;margin:18px 0 8px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--ground);padding:10px 18px;border-radius:8px;font-weight:600;max-width:90vw}
+textarea.csv{width:100%;min-height:160px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
+@media (max-width:560px){.qtext{font-size:1.35rem}.opt{font-size:1.1rem}.opts.two{grid-template-columns:1fr}.scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div class="wrap" id="app"><p class="empty">Loading…</p></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+/* =====================================================================
+   STEP 5 OF THE README: paste your Firebase web app settings here.
+   Firebase console > Project settings > Your apps > SDK setup and configuration > Config
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDO1MFXFSzHquq4jfM3e_qS6oy6m90RVYw",
+  authDomain: "kap-palliative-hims.firebaseapp.com",
+  projectId: "kap-palliative-hims",
+  storageBucket: "kap-palliative-hims.firebasestorage.app",
+  messagingSenderId: "14785045957",
+  appId: "1:14785045957:web:a55b64a7a8da92b84617ac"
+};
+
+/* ---------- Instrument (Appendix A). Hindi is a DRAFT pending forward/back-translation. ---------- */
+const ITEMS = [
+  {id:'K1',dom:'K',type:'tf',key:'T',en:'Palliative care can be provided together with active cancer treatment.',hi:'उपशामक देखभाल (पैलिएटिव केयर) कैंसर के चल रहे इलाज के साथ-साथ दी जा सकती है।'},
+  {id:'K2',dom:'K',type:'tf',key:'T',en:'The main focus of palliative care is relief of symptoms and stress.',hi:'उपशामक देखभाल का मुख्य उद्देश्य लक्षणों और तनाव से राहत देना है।'},
+  {id:'K3',dom:'K',type:'tf',key:'F',en:'Palliative care is only for the last days of life.',hi:'उपशामक देखभाल केवल जीवन के अंतिम दिनों के लिए होती है।'},
+  {id:'A1',dom:'A',type:'lik',en:'I feel comfortable asking my doctor about palliative/supportive care.',hi:'मुझे अपने डॉक्टर से उपशामक/सहायक देखभाल के बारे में पूछने में सहजता महसूस होती है।'},
+  {id:'A2',dom:'A',type:'lik',en:'Early information about care preferences is helpful for me and my family.',hi:'देखभाल की प्राथमिकताओं के बारे में जल्दी जानकारी मिलना मेरे और मेरे परिवार के लिए सहायक है।'},
+  {id:'A3',dom:'A',type:'lik',en:'I would like my family to be involved when discussing what matters to me.',hi:'जब मेरे लिए महत्वपूर्ण बातों पर चर्चा हो, तो मैं चाहूँगा/चाहूँगी कि मेरा परिवार भी शामिल हो।'},
+  {id:'P1',dom:'P',type:'yn',en:'I would like written information on palliative/supportive care.',hi:'मुझे उपशामक/सहायक देखभाल के बारे में लिखित जानकारी चाहिए।'},
+  {id:'P2',dom:'P',type:'yn',en:'I plan to speak with my doctor about my care preferences in the coming weeks.',hi:'मैं आने वाले हफ़्तों में अपनी देखभाल की प्राथमिकताओं के बारे में अपने डॉक्टर से बात करने की योजना बना रहा/रही हूँ।'},
+  {id:'P3',dom:'P',type:'yn',en:'I plan to speak with my family about my care preferences in the coming weeks.',hi:'मैं आने वाले हफ़्तों में अपनी देखभाल की प्राथमिकताओं के बारे में अपने परिवार से बात करने की योजना बना रहा/रही हूँ।'}
+];
+const ACCEPT = {id:'ACC',en:'How useful did you find the video and the question card?',hi:'आपको वीडियो और प्रश्न कार्ड कितने उपयोगी लगे?',
+  opts:{en:['Not useful at all','Slightly useful','Moderately useful','Very useful','Extremely useful'],hi:['बिल्कुल उपयोगी नहीं','थोड़े उपयोगी','कुछ हद तक उपयोगी','काफ़ी उपयोगी','बहुत अधिक उपयोगी']}};
+const OPTS = {
+  tf:{en:[['T','True'],['F','False']],hi:[['T','सही'],['F','गलत']]},
+  yn:{en:[['Y','Yes'],['N','No']],hi:[['Y','हाँ'],['N','नहीं']]},
+  lik:{en:[[1,'Strongly disagree'],[2,'Disagree'],[3,'Neither agree nor disagree'],[4,'Agree'],[5,'Strongly agree']],
+       hi:[[1,'पूरी तरह असहमत'],[2,'असहमत'],[3,'न सहमत, न असहमत'],[4,'सहमत'],[5,'पूरी तरह सहमत']]}
+};
+const DOM_NAME = {K:{en:'Knowledge',hi:'ज्ञान'},A:{en:'Attitude',hi:'दृष्टिकोण'},P:{en:'Practice / intent',hi:'व्यवहार / इरादा'}};
+const SKIP = 'SKIP';
+const H = 3600e3;
+
+/* ---------- scoring ---------- */
+function itemScore(it, v){
+  if(v===undefined||v===null||v===SKIP) return null;
+  if(it.type==='tf') return v===it.key?1:0;
+  if(it.type==='yn') return v==='Y'?1:0;
+  return Number(v);
+}
+function score(ans){
+  const out={K:0,A:0,P:0}; const miss={K:0,A:0,P:0};
+  for(const it of ITEMS){const s=itemScore(it,ans?.[it.id]); if(s===null) miss[it.dom]++; else out[it.dom]+=s;}
+  const r={K:miss.K?null:out.K,A:miss.A?null:out.A,P:miss.P?null:out.P};
+  r.total=(r.K===null||r.A===null||r.P===null)?null:r.K+r.A+r.P;
+  r.missing=miss.K+miss.A+miss.P;
+  return r;
+}
+
+/* ---------- helpers ---------- */
+const $app=document.getElementById('app');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDT=ms=>{if(!ms)return '';const d=new Date(ms);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});};
+const toLocalInput=ms=>{const d=new Date(ms);const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;};
+const sgn=n=>n===null||n===undefined?'–':(n>0?'+':'')+(Math.round(n*10)/10);
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600);}
+
+/* ---------- state ---------- */
+const S={email:'',pending:new Set(),unsub:null,db:null,dbState:'loading',canWrite:true,downloads:null,parts:{},view:'list',sel:null,form:null,lang:'en',csv:null};
+
+function t1Status(p){
+  if(p.status==='withdrawn') return {cls:'p-done',txt:'Withdrawn'};
+  if(!p.t0) return {cls:'p-amber',txt:'T0 not done'};
+  if(p.t1){const h=(p.t1.at-p.t0.at)/H;return {cls:'p-done',txt:`Done at ${Math.round(h)} h`+(h<48||h>72?' (outside window)':'')};}
+  const now=Date.now(), open=p.t0.at+48*H, close=p.t0.at+72*H;
+  if(now<open) return {cls:'p-wait',txt:`Opens in ${Math.ceil((open-now)/H)} h`,when:open};
+  if(now<=close) return {cls:'p-due',txt:`Due now, closes in ${Math.ceil((close-now)/H)} h`,due:true};
+  return {cls:'p-late',txt:`Overdue by ${Math.floor((now-close)/H)} h`,late:true};
+}
+
+/* ---------- views ---------- */
+function render(){
+  if(['loading','signin','denied','config','offline'].includes(S.dbState)) return renderGate();
+  if(S.view==='form') return renderForm();
+  if(S.view==='exposure') return renderExposure();
+  if(S.view==='detail') return renderDetail();
+  if(S.view==='export') return renderExport();
+  renderList();
+}
+
+function header(sub){
+  return `<header class="top"><div><h1>KAP Recorder</h1><p>${sub}</p></div><div class="row">${S.view!=='list'?'<button class="btn ghost" data-act="home">Back to participants</button>':''}${S.email?`<span style="color:var(--muted);font-size:.9rem">${esc(S.email)}</span><button class="linkbtn" data-act="signout">Sign out</button>`:''}</div></header>`;
+}
+function renderGate(){
+  let body='';
+  if(S.dbState==='loading') body='<p class="empty">Loading…</p>';
+  else if(S.dbState==='config') body=`<div class="card"><h2>Firebase settings missing</h2><p>This copy of the tool has not been connected to a Firebase project yet. Open <b>index.html</b>, find <b>FIREBASE_CONFIG</b> near the top of the script, and paste in your project's settings. The README explains where to find them (step 5).</p></div>`;
+  else if(S.dbState==='offline') body=`<div class="card"><h2>Can't reach Firebase</h2><p>The Firebase scripts did not load. Check the internet connection and reload the page.</p></div>`;
+  else if(S.dbState==='signin') body=`<div class="card"><h2>Sign in to record data</h2><p>Use the Google account that is on this study's access list.</p><div class="row" style="margin-top:12px"><button class="btn" data-act="signin">Sign in with Google</button></div></div>`;
+  else if(S.dbState==='denied') body=`<div class="card"><h2>This account can't open the study records</h2><p>You are signed in as <b>${esc(S.email)}</b>, which is not on the access list. Sign out and use the study account, or ask Dr Chhabra to add this email to the Firestore rules.</p><div class="row" style="margin-top:12px"><button class="btn ghost" data-act="signout">Sign out</button></div></div>`;
+  $app.innerHTML=`<header class="top"><div><h1>KAP Recorder</h1><p>Palliative care KAP study, Oncology OPD, HIMS.</p></div></header>`+body;
+}
+
+function renderList(){
+  const list=Object.values(S.parts).sort((a,b)=>a.code.localeCompare(b.code));
+  const active=list.filter(p=>p.status!=='withdrawn');
+  const t0n=active.filter(p=>p.t0).length, t1n=active.filter(p=>p.t1).length;
+  const due=active.filter(p=>t1Status(p).due).length, late=active.filter(p=>t1Status(p).late).length;
+  const paired=active.filter(p=>p.t0&&p.t1).map(p=>[score(p.t0.ans).total,score(p.t1.ans).total]).filter(([a,b])=>a!==null&&b!==null);
+  const meanCh=paired.length?paired.reduce((s,[a,b])=>s+(b-a),0)/paired.length:null;
+  let warn='';
+  if(S.pending.size) warn=`<p class="note"><strong>${S.pending.size} record${S.pending.size>1?'s':''} waiting to upload.</strong> ${S.pending.size>1?'They are':'It is'} saved on this device and will upload by itself when the internet is back. Don't clear this browser's data until it does.</p>`;
+  $app.innerHTML=header('Palliative care KAP study, Oncology OPD, HIMS. Single-arm pre–post, T0 and T1 at 48–72 h.')+warn+
+  `<p class="note"><strong>No names or phone numbers here.</strong> Use the study code only. Keep the code-to-name and phone list on paper, in the locked cabinet.</p>
+  <div class="stats">
+    <div class="stat"><b>${active.length}</b><span>Enrolled (target 50)</span></div>
+    <div class="stat"><b>${t0n}</b><span>T0 done</span></div>
+    <div class="stat"><b>${t1n}</b><span>T1 done (need 34 paired)</span></div>
+    <div class="stat"><b>${due}</b><span>T1 due now</span></div>
+    <div class="stat"><b>${late}</b><span>T1 overdue</span></div>
+    <div class="stat"><b>${sgn(meanCh)}</b><span>Mean total change, ${paired.length} complete pairs</span></div>
+  </div>
+  <div class="row" style="justify-content:space-between;margin-bottom:12px">
+    <button class="btn" data-act="enrol" ${S.dbState!=='ok'||!S.canWrite?'disabled':''}>Enrol new participant and start T0</button>
+    <button class="btn ghost" data-act="export" ${list.length?'':'disabled'}>Export CSV</button>
+  </div>
+  <div class="tablewrap">${list.length?`<table><thead><tr><th>Code</th><th>T0</th><th>Exposure</th><th>T1</th><th class="num">T0 total</th><th class="num">T1 total</th><th class="num">Change</th><th>Actions</th></tr></thead><tbody>${list.map(rowHTML).join('')}</tbody></table>`:
+  `<p class="empty">${S.dbState==='loading'?'Loading records…':'No participants yet. Enrol the first one after consent is signed.'}</p>`}</div>
+  <p style="color:var(--muted);font-size:.9rem;margin-top:12px">Scores: Knowledge 0–3 (K3 reverse-scored), Attitude 3–15, Practice 0–3, Total 3–21. A domain with a skipped item has no score, and neither does the total.</p>`;
+}
+function rowHTML(p){
+  const st=t1Status(p), s0=p.t0?score(p.t0.ans):null, s1=p.t1?score(p.t1.ans):null;
+  const ch=s0&&s1&&s0.total!==null&&s1.total!==null?s1.total-s0.total:null;
+  const exp=p.exposure?(p.exposure.video==='Y'?'Recorded':'<span class="pill p-amber">Video not seen</span>'):(p.t0?'<span class="pill p-amber">Pending</span>':'–');
+  const can=S.dbState==='ok'&&S.canWrite&&p.status!=='withdrawn';
+  let acts=`<button class="linkbtn" data-act="detail" data-code="${esc(p.code)}">View</button>`;
+  if(can&&!p.t0) acts+=` <button class="linkbtn" data-act="t0" data-code="${esc(p.code)}">Record T0</button>`;
+  if(can&&p.t0&&!p.exposure) acts+=` <button class="linkbtn" data-act="exposure" data-code="${esc(p.code)}">Record exposure</button>`;
+  if(can&&p.t0&&!p.t1) acts+=` <button class="linkbtn" data-act="t1" data-code="${esc(p.code)}">Record T1</button>`;
+  if(S.dbState==='ok'&&S.canWrite) acts+=` <button class="linkbtn" style="color:var(--red)" data-act="delete" data-code="${esc(p.code)}">Delete</button>`;
+  return `<tr><td><b>${esc(p.code)}</b>${S.pending.has(p.code)?' <span class="pill p-amber">Not uploaded</span>':''}</td><td>${p.t0?fmtDT(p.t0.at):'–'}</td><td>${exp}</td><td><span class="pill ${st.cls}">${esc(st.txt)}</span></td>
+  <td class="num">${s0?.total??'–'}</td><td class="num">${s1?.total??'–'}</td><td class="num">${sgn(ch)}</td><td>${acts}</td></tr>`;
+}
+
+/* questionnaire: step 0 = setup, 1..9 items, (10 = acceptability at T1), last = review */
+function startForm(code,tp){
+  S.form={code,tp,step:0,at:Date.now(),mode:tp==='t0'?'in-person':'phone',by:'',ans:{},acc:null};
+  S.lang='en'; S.view='form'; render(); window.scrollTo(0,0);
+}
+function steps(){return 1+ITEMS.length+(S.form.tp==='t1'?1:0)+1;}
+function renderForm(){
+  const f=S.form, n=steps(), L=S.lang, p=S.parts[f.code];
+  const tpName=f.tp==='t0'?'T0 baseline (before the video)':'T1 follow-up (48–72 h)';
+  let body='';
+  const langT=`<div class="lang" role="group" aria-label="Question language"><button data-act="lang" data-v="en" aria-pressed="${L==='en'}">English</button><button data-act="lang" data-v="hi" aria-pressed="${L==='hi'}" lang="hi">हिंदी</button></div>`;
+  if(f.step===0){
+    let winNote='';
+    if(f.tp==='t1'&&p?.t0){const h=(f.at-p.t0.at)/H; if(h<48||h>72) winNote=`<p class="note"><strong>Outside the 48–72 h window.</strong> This time is ${Math.round(h)} h after T0. You can still record it; the export flags it.</p>`;}
+    body=`<div class="card"><h2>Before you start</h2>${winNote}
+    <div class="fgrid">
+      <label class="f">Date and time of this interview<input type="datetime-local" id="f-at" value="${toLocalInput(f.at)}"></label>
+      <label class="f">Your initials<input id="f-by" maxlength="8" autocomplete="off" value="${esc(f.by)}" placeholder="e.g. SS"></label>
+      <div class="f" style="display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.95rem">How it is being done<div class="seg" role="group" aria-label="Mode"><button data-act="mode" data-v="in-person" aria-pressed="${f.mode==='in-person'}">In person</button><button data-act="mode" data-v="phone" aria-pressed="${f.mode==='phone'}">By phone</button></div></div>
+    </div>
+    <p style="color:var(--muted);margin:16px 0 0">Choose the language the participant prefers, using the switch above. Read each statement exactly as written. If the participant doesn't want to answer, use "Skip this question".</p>
+    <div class="qnav"><span></span><button class="btn" data-act="next">Start questions</button></div></div>`;
+  } else if(f.step<=ITEMS.length){
+    const it=ITEMS[f.step-1], v=f.ans[it.id], opts=OPTS[it.type][L];
+    body=`<div class="card"><p class="domain">${it.id} · ${DOM_NAME[it.dom][L]}</p><p class="qtext" lang="${L}">${esc(it[L])}</p>
+      <div class="opts ${it.type==='lik'?'':'two'}">${opts.map(([val,lab],i)=>`<button class="opt" data-act="ans" data-v="${val}" aria-pressed="${String(v)===String(val)}" lang="${L}"><span class="k">${it.type==='lik'?val:(i+1)}</span>${esc(lab)}</button>`).join('')}</div>
+      <div class="qnav"><button class="btn ghost" data-act="prev">Previous</button>
+      <button class="linkbtn" data-act="ans" data-v="${SKIP}" aria-pressed="${v===SKIP}">${v===SKIP?'Skipped. Tap an answer to change.':'Skip this question'}</button>
+      <button class="btn" data-act="next" ${v===undefined?'disabled':''}>Next</button></div></div>`;
+  } else if(f.tp==='t1'&&f.step===ITEMS.length+1){
+    const v=f.acc;
+    body=`<div class="card"><p class="domain">Acceptability</p><p class="qtext" lang="${L}">${esc(ACCEPT[L])}</p>
+      <div class="opts">${ACCEPT.opts[L].map((lab,i)=>`<button class="opt" data-act="acc" data-v="${i+1}" aria-pressed="${v===i+1}" lang="${L}"><span class="k">${i+1}</span>${esc(lab)}</button>`).join('')}</div>
+      <div class="qnav"><button class="btn ghost" data-act="prev">Previous</button>
+      <button class="linkbtn" data-act="acc" data-v="${SKIP}" aria-pressed="${v===SKIP}">${v===SKIP?'Skipped. Tap an answer to change.':'Skip this question'}</button>
+      <button class="btn" data-act="next" ${v===null?'disabled':''}>Next</button></div></div>`;
+  } else {
+    const sc=score(f.ans);
+    const lab=(it,v)=>v===SKIP?'<span class="pill p-amber">Skipped</span>':esc((OPTS[it.type].en.find(o=>String(o[0])===String(v))||[,''])[1]);
+    body=`<div class="card"><h2>Check and save</h2>
+    <div class="scores"><div><b>${sc.K??'–'}</b><span>Knowledge /3</span></div><div><b>${sc.A??'–'}</b><span>Attitude /15</span></div><div><b>${sc.P??'–'}</b><span>Practice /3</span></div><div><b>${sc.total??'–'}</b><span>Total /21</span></div></div>
+    <table class="review"><tbody>${ITEMS.map(it=>`<tr><td>${it.id}</td><td>${esc(it.en)}</td><td>${lab(it,f.ans[it.id])}</td><td><button class="linkbtn" data-act="goto" data-v="${ITEMS.indexOf(it)+1}">Change</button></td></tr>`).join('')}
+    ${f.tp==='t1'?`<tr><td>ACC</td><td>${esc(ACCEPT.en)}</td><td>${f.acc===SKIP?'<span class="pill p-amber">Skipped</span>':esc(f.acc+' – '+ACCEPT.opts.en[f.acc-1])}</td><td><button class="linkbtn" data-act="goto" data-v="${ITEMS.length+1}">Change</button></td></tr>`:''}
+    </tbody></table>
+    <div class="qnav"><button class="btn ghost" data-act="prev">Previous</button><button class="btn" data-act="save">Save ${f.tp.toUpperCase()}</button></div></div>`;
+  }
+  $app.innerHTML=`<div class="qhead"><div><div class="who">${esc(f.code)} · ${tpName}</div><div style="color:var(--muted);font-size:.9rem">Step ${f.step+1} of ${n}</div></div>${langT}</div>
+  <div class="progress" aria-hidden="true"><i style="width:${Math.round((f.step+1)/n*100)}%"></i></div>${body}
+  <div style="margin-top:14px"><button class="linkbtn" data-act="cancel">Cancel without saving</button></div>`;
+}
+
+function renderExposure(){
+  const c=S.sel, e=S.form;
+  const yn=(k,lab)=>`<div class="yn"><span>${lab}</span><div class="seg" role="group" aria-label="${esc(lab)}"><button data-act="exp" data-k="${k}" data-v="Y" aria-pressed="${e[k]==='Y'}">Yes</button><button data-act="exp" data-k="${k}" data-v="N" aria-pressed="${e[k]==='N'}">No</button></div></div>`;
+  const ready=['video','qplOffered','qplAccepted','discussion'].every(k=>e[k])&&e.by;
+  $app.innerHTML=header(`${esc(c)} · Exposure and fidelity checklist (Appendix B)`)+`<div class="card">
+  ${yn('video','Video visible in the waiting room during the visit')}${yn('qplOffered','QPL card offered')}${yn('qplAccepted','QPL card accepted')}${yn('discussion','Requested clinician discussion')}
+  <div class="fgrid" style="margin-top:14px">
+    <label class="f">Notes (distress or escalation, if any)<textarea id="e-notes" rows="3">${esc(e.notes)}</textarea></label>
+    <label class="f">Staff initials<input id="e-by" maxlength="8" value="${esc(e.by)}"></label>
+  </div>
+  <div class="qnav"><button class="btn ghost" data-act="home">Cancel</button><button class="btn" data-act="saveexp" ${ready?'':'disabled'}>Save checklist</button></div></div>`;
+}
+
+function renderDetail(){
+  const p=S.parts[S.sel]; if(!p){S.view='list';return render();}
+  const s0=p.t0?score(p.t0.ans):null, s1=p.t1?score(p.t1.ans):null;
+  const lab=(it,v)=>v===undefined?'–':v===SKIP?'Skipped':(OPTS[it.type].en.find(o=>String(o[0])===String(v))||[,''])[1];
+  const meta=t=>t?`${fmtDT(t.at)}, ${t.mode}, by ${esc(t.by)}, in ${t.lang==='hi'?'Hindi':'English'}`:'Not done';
+  const can=S.dbState==='ok'&&S.canWrite;
+  $app.innerHTML=header(`${esc(p.code)}${p.status==='withdrawn'?' · withdrawn':''}`)+`<div class="card">
+  <p><b>T0:</b> ${meta(p.t0)}<br><b>T1:</b> ${meta(p.t1)}${p.t0&&p.t1?` (${Math.round((p.t1.at-p.t0.at)/H)} h after T0)`:''}</p>
+  <div class="tablewrap"><table><thead><tr><th>Item</th><th>Statement</th><th>T0</th><th>T1</th></tr></thead><tbody>
+  ${ITEMS.map(it=>`<tr><td><b>${it.id}</b></td><td>${esc(it.en)}</td><td>${esc(lab(it,p.t0?.ans?.[it.id]))}</td><td>${esc(lab(it,p.t1?.ans?.[it.id]))}</td></tr>`).join('')}
+  <tr><td><b>K</b></td><td>Knowledge score /3</td><td>${s0?.K??'–'}</td><td>${s1?.K??'–'}</td></tr>
+  <tr><td><b>A</b></td><td>Attitude score /15</td><td>${s0?.A??'–'}</td><td>${s1?.A??'–'}</td></tr>
+  <tr><td><b>P</b></td><td>Practice score /3</td><td>${s0?.P??'–'}</td><td>${s1?.P??'–'}</td></tr>
+  <tr><td><b>Total</b></td><td>Total KAP /21</td><td>${s0?.total??'–'}</td><td>${s1?.total??'–'}</td></tr>
+  <tr><td><b>ACC</b></td><td>Acceptability (1–5)</td><td>–</td><td>${p.t1?(p.t1.acc===SKIP?'Skipped':esc(p.t1.acc)):'–'}</td></tr>
+  </tbody></table></div>
+  ${p.exposure?`<h3>Exposure checklist</h3><p>Video seen: ${esc(p.exposure.video)} · QPL offered: ${esc(p.exposure.qplOffered)} · QPL accepted: ${esc(p.exposure.qplAccepted)} · Requested discussion: ${esc(p.exposure.discussion)} · by ${esc(p.exposure.by)}, ${fmtDT(p.exposure.at)}${p.exposure.notes?`<br>Notes: ${esc(p.exposure.notes)}`:''}</p>`:''}
+  ${can?`<div class="row" style="margin-top:18px">
+    ${p.t0?`<button class="btn ghost" data-act="t0" data-code="${esc(p.code)}">Redo T0</button>`:''}
+    ${p.t1?`<button class="btn ghost" data-act="t1" data-code="${esc(p.code)}">Redo T1</button>`:''}
+    ${p.t0?`<button class="btn danger" data-act="delpart" data-v="t0">Delete T0</button>`:''}
+    ${p.exposure?`<button class="btn danger" data-act="delpart" data-v="exposure">Delete exposure checklist</button>`:''}
+    ${p.t1?`<button class="btn danger" data-act="delpart" data-v="t1">Delete T1</button>`:''}
+    ${p.status!=='withdrawn'?`<button class="btn danger" data-act="withdraw">Mark as withdrawn</button>`:`<button class="btn ghost" data-act="reinstate">Undo withdrawal</button>`}
+    <button class="btn danger" data-act="delete">Delete this record</button></div>`:''}
+  </div>`;
+}
+
+/* ---------- CSV ---------- */
+function buildCSV(){
+  const cols=['code','status','t0_datetime','t0_mode','t0_by','t0_lang',...ITEMS.map(i=>'t0_'+i.id),'t0_K','t0_A','t0_P','t0_total','t0_missing',
+    'exp_video','exp_qpl_offered','exp_qpl_accepted','exp_requested_discussion','exp_notes',
+    't1_datetime','t1_hours_after_t0','t1_in_window','t1_mode','t1_by','t1_lang',...ITEMS.map(i=>'t1_'+i.id),'t1_K','t1_A','t1_P','t1_total','t1_missing','t1_acceptability',
+    'chg_K','chg_A','chg_P','chg_total'];
+  const raw=(it,v)=>v===undefined?'':v===SKIP?'':it.type==='tf'?(v==='T'?1:0):it.type==='yn'?(v==='Y'?1:0):v;
+  const iso=ms=>ms?new Date(ms).toISOString():'';
+  const q=v=>{v=v===null||v===undefined?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const rows=Object.values(S.parts).sort((a,b)=>a.code.localeCompare(b.code)).map(p=>{
+    const s0=p.t0?score(p.t0.ans):{}, s1=p.t1?score(p.t1.ans):{}, e=p.exposure||{};
+    const h=p.t0&&p.t1?(p.t1.at-p.t0.at)/H:null;
+    const d=k=>(s0[k]!=null&&s1[k]!=null)?s1[k]-s0[k]:'';
+    return [p.code,p.status||'active',iso(p.t0?.at),p.t0?.mode,p.t0?.by,p.t0?.lang,...ITEMS.map(i=>raw(i,p.t0?.ans?.[i.id])),s0.K,s0.A,s0.P,s0.total,p.t0?s0.missing:'',
+      e.video,e.qplOffered,e.qplAccepted,e.discussion,e.notes,
+      iso(p.t1?.at),h===null?'':h.toFixed(1),h===null?'':(h>=48&&h<=72?1:0),p.t1?.mode,p.t1?.by,p.t1?.lang,...ITEMS.map(i=>raw(i,p.t1?.ans?.[i.id])),s1.K,s1.A,s1.P,s1.total,p.t1?s1.missing:'',p.t1?(p.t1.acc===SKIP?'':p.t1.acc):'',
+      d('K'),d('A'),d('P'),d('total')].map(q).join(',');
+  });
+  return [cols.join(','),...rows].join('\n');
+}
+function renderExport(){
+  $app.innerHTML=header('Export')+`<div class="card"><p>One row per participant. True/False items are coded 1 = True, 0 = False (raw answer, before reverse-scoring K3). Yes/No items are 1 = Yes, 0 = No. Skipped items are blank. Change = T1 minus T0.</p>
+  <div class="row" style="margin:12px 0"><button class="btn" data-act="dl">Download CSV</button><button class="btn ghost" data-act="sel">Select all text</button></div>
+  <textarea class="csv" id="csv" readonly aria-label="CSV data">${esc(S.csv)}</textarea></div>`;
+}
+
+/* ---------- db writes ---------- */
+async function put(code,data){
+  const w=S.db.doc('participants/'+code).set(data);
+  try{
+    const r=await Promise.race([w.then(()=> 'ok'),new Promise(res=>setTimeout(()=>res('queued'),5000))]);
+    if(r==='queued'){toast('No internet. Saved on this device; it will upload when the connection is back.');w.catch(onWriteError);}
+    return true;
+  }catch(e){onWriteError(e);return false;}
+}
+function onWriteError(e){
+  if(e?.code==='permission-denied') toast('This account is not allowed to save. Check the access list.');
+  else if(e?.code==='resource-exhausted') toast('Firebase free quota reached for today. Try again tomorrow.');
+  else toast('Could not save. Check the connection and try again.');
+}
+async function enrol(){
+  const nums=Object.keys(S.parts).map(c=>parseInt(c.replace(/\D/g,''),10)).filter(n=>!isNaN(n));
+  let n=(nums.length?Math.max(...nums):0)+1, code;
+  for(let i=0;i<20;i++){code='KAP-'+String(n).padStart(3,'0');const s=await S.db.doc('participants/'+code).get();if(!s.exists)break;n++;}
+  const ok=await put(code,{code,status:'active',createdAt:Date.now()});
+  if(ok){S.parts[code]=S.parts[code]||{code,status:'active'};toast(code+' enrolled. Write this code on the consent form.');startForm(code,'t0');}
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',async ev=>{
+  const b=ev.target.closest('[data-act]'); if(!b||b.disabled) return;
+  const a=b.dataset.act, v=b.dataset.v, f=S.form;
+  const keepFields=()=>{const at=document.getElementById('f-at'),by=document.getElementById('f-by');if(at&&at.value)f.at=new Date(at.value).getTime();if(by)f.by=by.value.trim();};
+  switch(a){
+    case 'home': S.view='list';S.form=null;render();break;
+    case 'enrol': b.disabled=true; await enrol(); break;
+    case 'export': S.csv=buildCSV();S.view='export';render();break;
+    case 'dl': {const blob=new Blob(['\ufeff'+S.csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kap_data_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);break;}
+    case 'signin': {const prov=new firebase.auth.GoogleAuthProvider();try{await firebase.auth().signInWithPopup(prov);}catch(e){if(e?.code==='auth/popup-blocked'||e?.code==='auth/operation-not-supported-in-this-environment')firebase.auth().signInWithRedirect(prov);else if(e?.code!=='auth/popup-closed-by-user'&&e?.code!=='auth/cancelled-popup-request')toast('Sign-in failed: '+(e?.code||'unknown error'));}break;}
+    case 'signout': if(S.view==='form'&&!confirm('Sign out? Unsaved answers on this screen will be lost.'))break; await firebase.auth().signOut(); S.view='list';S.form=null; break;
+    case 'sel': {const t=document.getElementById('csv');t.focus();t.select();break;}
+    case 'detail': S.sel=b.dataset.code;S.view='detail';render();break;
+    case 't0': case 't1': {
+      const code=b.dataset.code, p=S.parts[code];
+      if(p?.[a]&&!confirm(`This replaces the saved ${a.toUpperCase()} for ${code}. Continue?`)) break;
+      startForm(code,a);break;}
+    case 'exposure': S.sel=b.dataset.code;S.form={video:null,qplOffered:null,qplAccepted:null,discussion:null,notes:'',by:''};S.view='exposure';render();break;
+    case 'exp': S.form.notes=document.getElementById('e-notes').value;S.form.by=document.getElementById('e-by').value.trim();S.form[b.dataset.k]=v;render();break;
+    case 'saveexp': {
+      f.notes=document.getElementById('e-notes').value.trim();f.by=document.getElementById('e-by').value.trim();
+      const p=S.parts[S.sel]; const data={...p,exposure:{...f,at:Date.now()}};
+      if(await put(S.sel,data)){toast('Checklist saved for '+S.sel);S.view='list';render();}break;}
+    case 'lang': if(S.view==='form'&&f.step===0)keepFields(); S.lang=v;render();break;
+    case 'mode': keepFields();f.mode=v;render();break;
+    case 'ans': {const it=ITEMS[f.step-1];f.ans[it.id]=v===SKIP?SKIP:(it.type==='lik'?Number(v):v);render();
+      setTimeout(()=>{if(S.view==='form'&&S.form===f&&f.step<steps()-1){f.step++;render();}},v===SKIP?0:220);break;}
+    case 'acc': f.acc=v===SKIP?SKIP:Number(v);render();setTimeout(()=>{if(S.view==='form'&&S.form===f){f.step++;render();}},v===SKIP?0:220);break;
+    case 'prev': if(f.step>0){f.step--;render();}break;
+    case 'next':
+      if(f.step===0){keepFields(); if(!f.by){toast('Enter your initials first.');document.getElementById('f-by')?.focus();break;} if(isNaN(f.at)){toast('Enter a valid date and time.');break;}}
+      if(f.step<steps()-1){f.step++;render();window.scrollTo(0,0);}break;
+    case 'goto': f.step=Number(v);render();break;
+    case 'cancel': if(confirm('Leave without saving? The answers on this screen will be lost.')){S.view='list';S.form=null;render();}break;
+    case 'save': {
+      const p=S.parts[f.code]||{code:f.code,status:'active'};
+      const rec={at:f.at,mode:f.mode,by:f.by,lang:S.lang,ans:f.ans}; if(f.tp==='t1')rec.acc=f.acc;
+      b.disabled=true;
+      if(await put(f.code,{...p,[f.tp]:rec})){toast(`${f.tp.toUpperCase()} saved for ${f.code}`+(f.tp==='t0'?'. Now show the video and offer the QPL card.':''));S.view='list';S.form=null;render();}
+      else b.disabled=false;
+      break;}
+    case 'withdraw': if(confirm('Mark '+S.sel+' as withdrawn? The record is kept but excluded from counts.')){const p=S.parts[S.sel];if(await put(S.sel,{...p,status:'withdrawn',withdrawnAt:Date.now()}))render();}break;
+    case 'reinstate': {const p={...S.parts[S.sel],status:'active'};delete p.withdrawnAt;if(await put(S.sel,p))render();break;}
+    case 'delete': {const code=b.dataset.code||S.sel;
+      if(confirm('Delete the whole record for '+code+' (T0, exposure checklist and T1)? This cannot be undone.')){try{const dw=S.db.doc('participants/'+code).delete();await Promise.race([dw,new Promise(r=>setTimeout(r,5000))]);dw.catch(onWriteError);delete S.parts[code];S.view='list';render();toast(code+' deleted');}catch(e){toast('Could not delete. Check the connection and try again.');}}break;}
+    case 'delpart': {const names={t0:'T0',t1:'T1',exposure:'exposure checklist'};
+      const warn=v==='t0'&&S.parts[S.sel]?.t1?' The T1 answers stay, but there will be no change score until T0 is recorded again.':'';
+      if(confirm('Delete the '+names[v]+' for '+S.sel+'? This cannot be undone.'+warn)){const p={...S.parts[S.sel]};delete p[v];if(await put(S.sel,p)){S.parts[S.sel]=p;render();toast(names[v]+' deleted for '+S.sel);}}break;}
+  }
+});
+document.addEventListener('input',ev=>{
+  if(ev.target.id==='e-by'){const btn=document.querySelector('[data-act="saveexp"]');S.form.by=ev.target.value.trim();if(btn)btn.disabled=!(['video','qplOffered','qplAccepted','discussion'].every(k=>S.form[k])&&S.form.by);}
+});
+
+/* ---------- boot ---------- */
+render();
+(function boot(){
+  if(typeof firebase==='undefined'){S.dbState='offline';render();return;}
+  if(Object.values(FIREBASE_CONFIG).some(v=>!v||String(v).startsWith('PASTE'))){S.dbState='config';render();return;}
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const fs=firebase.firestore();
+  fs.enablePersistence({synchronizeTabs:true}).catch(()=>{});
+  S.db={doc:path=>fs.doc(path)};
+  firebase.auth().getRedirectResult().catch(e=>toast('Sign-in failed: '+(e?.code||'unknown error')));
+  firebase.auth().onAuthStateChanged(u=>{
+    if(S.unsub){S.unsub();S.unsub=null;}
+    S.parts={};S.pending=new Set();
+    if(!u){S.email='';S.dbState='signin';render();return;}
+    S.email=u.email||'';S.dbState='loading';render();
+    S.unsub=fs.collection('participants').onSnapshot({includeMetadataChanges:true},snap=>{
+      const next={},pend=new Set();
+      snap.docs.forEach(d=>{const v=d.data();if(v&&typeof v.code==='string'){next[d.id]=v;if(d.metadata.hasPendingWrites)pend.add(d.id);}});
+      S.parts=next;S.pending=pend;S.dbState='ok';
+      if(S.view==='list'||S.view==='detail')render();
+    },err=>{S.dbState=err?.code==='permission-denied'?'denied':'offline';render();});
+  });
+})();
+setInterval(()=>{if(S.view==='list')render();},5*60*1000);
+</script>
+</body>
+</html>
