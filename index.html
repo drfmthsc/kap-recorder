@@ -73,6 +73,7 @@ tr:last-child td{border-bottom:none}
 .qtext{font-size:2rem;line-height:1.35;font-weight:600;margin:0 0 22px;text-wrap:pretty}
 .opts{display:grid;gap:10px}
 .opts.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .opt{border:2px solid var(--line);background:var(--surface);border-radius:10px;padding:14px 16px;min-height:64px;font-size:1.4rem;font-weight:600;text-align:left;display:flex;gap:12px;align-items:center}
 .opt .k{flex-shrink:0;width:36px;height:36px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.95rem}
 .opt[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft)}
@@ -95,7 +96,7 @@ h2{font-size:1.25rem;margin:0 0 10px}
 h3{font-size:1.05rem;margin:18px 0 8px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--ground);padding:10px 18px;border-radius:8px;font-weight:600;max-width:90vw}
 textarea.csv{width:100%;min-height:160px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
-@media (max-width:560px){.qtext{font-size:1.55rem}.opt{font-size:1.25rem}.opts.two{grid-template-columns:1fr}.scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.qtext{font-size:1.55rem}.opt{font-size:1.25rem}.opts.two,.opts.three{grid-template-columns:1fr}.scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
 a.call{display:inline-block;margin-left:6px;font-weight:600;color:var(--teal)}
 .sub{display:block;color:var(--muted);font-size:.85rem;font-weight:400}
 .paper{background:#fff;color:#111;border:1px solid var(--line);border-radius:8px;padding:24px;font-size:15px;line-height:1.4}
@@ -146,17 +147,29 @@ const ITEMS = [
   {id:'K1',dom:'K',type:'tf',key:'T',en:'Palliative care can be provided together with active cancer treatment.',hi:'उपशामक देखभाल (पैलिएटिव केयर) कैंसर के चल रहे इलाज के साथ-साथ दी जा सकती है।'},
   {id:'K2',dom:'K',type:'tf',key:'T',en:'The main focus of palliative care is relief of symptoms and stress.',hi:'उपशामक देखभाल का मुख्य उद्देश्य लक्षणों और तनाव से राहत देना है।'},
   {id:'K3',dom:'K',type:'tf',key:'F',en:'Palliative care is only for the last days of life.',hi:'उपशामक देखभाल केवल जीवन के अंतिम दिनों के लिए होती है।'},
+  {id:'K4',dom:'K',type:'tf',key:'T',en:'Palliative care helps with problems like pain, breathlessness, nausea and poor sleep.',hi:'उपशामक देखभाल दर्द, सांस फूलना, जी मिचलाना और नींद न आने जैसी समस्याओं में मदद करती है।'},
+  {id:'K5',dom:'K',type:'tf',key:'F',en:'Choosing palliative care means stopping cancer treatment.',hi:'उपशामक देखभाल चुनने का मतलब है कैंसर का इलाज बंद कर देना।'},
+  {id:'K6',dom:'K',type:'tf',key:'T',en:'Palliative care can include help from a dietitian, a counsellor or a social worker.',hi:'उपशामक देखभाल में आहार विशेषज्ञ, परामर्शदाता (काउंसलर) या सामाजिक कार्यकर्ता की मदद भी शामिल हो सकती है।'},
+  {id:'K7',dom:'K',type:'tf',key:'T',en:"Palliative care also supports the patient's family.",hi:'उपशामक देखभाल मरीज़ के परिवार को भी सहारा देती है।'},
+  {id:'K8',dom:'K',type:'tf',key:'T',en:'Patients can tell their care team in advance what kind of care they want.',hi:'मरीज़ पहले से अपनी देखभाल टीम को बता सकते हैं कि वे किस तरह की देखभाल चाहते हैं।'},
   {id:'A1',dom:'A',type:'lik',en:'I feel comfortable asking my doctor about palliative/supportive care.',hi:'मुझे अपने डॉक्टर से उपशामक/सहायक देखभाल के बारे में पूछने में सहजता महसूस होती है।'},
   {id:'A2',dom:'A',type:'lik',en:'Early information about care preferences is helpful for me and my family.',hi:'देखभाल की प्राथमिकताओं के बारे में जल्दी जानकारी मिलना मेरे और मेरे परिवार के लिए सहायक है।'},
   {id:'A3',dom:'A',type:'lik',en:'I would like my family to be involved when discussing what matters to me.',hi:'जब मेरे लिए महत्वपूर्ण बातों पर चर्चा हो, तो मैं चाहूँगा/चाहूँगी कि मेरा परिवार भी शामिल हो।'},
+  {id:'A4',dom:'A',type:'lik',en:'I would accept a referral to the palliative care team if my doctor suggested it.',hi:'अगर मेरे डॉक्टर सलाह दें, तो मैं उपशामक देखभाल टीम के पास भेजे जाने (रेफ़रल) को स्वीकार करूँगा/करूँगी।'},
+  {id:'A5',dom:'A',type:'lik',rev:true,en:'Talking about palliative care would make me lose hope.',hi:'उपशामक देखभाल के बारे में बात करने से मेरी उम्मीद टूट जाएगी।'},
   {id:'P1',dom:'P',type:'yn',en:'I would like written information on palliative/supportive care.',hi:'मुझे उपशामक/सहायक देखभाल के बारे में लिखित जानकारी चाहिए।'},
   {id:'P2',dom:'P',type:'yn',en:'I plan to speak with my doctor about my care preferences in the coming weeks.',hi:'मैं आने वाले हफ़्तों में अपनी देखभाल की प्राथमिकताओं के बारे में अपने डॉक्टर से बात करने की योजना बना रहा/रही हूँ।'},
   {id:'P3',dom:'P',type:'yn',en:'I plan to speak with my family about my care preferences in the coming weeks.',hi:'मैं आने वाले हफ़्तों में अपनी देखभाल की प्राथमिकताओं के बारे में अपने परिवार से बात करने की योजना बना रहा/रही हूँ।'}
 ];
+const PRIOR = {id:'PRIOR',en:'Had you heard of palliative care before today?',hi:'क्या आपने आज से पहले उपशामक देखभाल (पैलिएटिव केयर) के बारे में सुना था?'};
+const T1X = [
+  {id:'RECALL',en:'Did you watch the video about palliative care in the waiting room?',hi:'क्या आपने प्रतीक्षालय में उपशामक देखभाल के बारे में वीडियो देखा था?'},
+  {id:'QPLUSE',en:'After getting the question card, did you ask your doctor or nurse any of the questions on it?',hi:'प्रश्न कार्ड मिलने के बाद, क्या आपने अपने डॉक्टर या नर्स से उस पर लिखा कोई प्रश्न पूछा?'}
+];
 const ACCEPT = {id:'ACC',en:'How useful did you find the video and the question card?',hi:'आपको वीडियो और प्रश्न कार्ड कितने उपयोगी लगे?',
   opts:{en:['Not useful at all','Slightly useful','Moderately useful','Very useful','Extremely useful'],hi:['बिल्कुल उपयोगी नहीं','थोड़े उपयोगी','कुछ हद तक उपयोगी','काफ़ी उपयोगी','बहुत अधिक उपयोगी']}};
 const OPTS = {
-  tf:{en:[['T','True'],['F','False']],hi:[['T','सही'],['F','गलत']]},
+  tf:{en:[['T','True'],['F','False'],['DK',"Don't know"]],hi:[['T','सही'],['F','गलत'],['DK','पता नहीं']]},
   yn:{en:[['Y','Yes'],['N','No']],hi:[['Y','हाँ'],['N','नहीं']]},
   lik:{en:[[1,'Strongly disagree'],[2,'Disagree'],[3,'Neither agree nor disagree'],[4,'Agree'],[5,'Strongly agree']],
        hi:[[1,'पूरी तरह असहमत'],[2,'असहमत'],[3,'न सहमत, न असहमत'],[4,'सहमत'],[5,'पूरी तरह सहमत']]}
@@ -170,7 +183,7 @@ function itemScore(it, v){
   if(v===undefined||v===null||v===SKIP) return null;
   if(it.type==='tf') return v===it.key?1:0;
   if(it.type==='yn') return v==='Y'?1:0;
-  return Number(v);
+  return it.rev?6-Number(v):Number(v);
 }
 function score(ans){
   const out={K:0,A:0,P:0}; const miss={K:0,A:0,P:0};
@@ -252,7 +265,7 @@ function renderList(){
   </div>
   <div class="tablewrap">${list.length?`<table><thead><tr><th>Code</th><th>T0</th><th>Exposure</th><th>T1</th><th class="num">T0 total</th><th class="num">T1 total</th><th class="num">Change</th><th>Actions</th></tr></thead><tbody>${list.map(rowHTML).join('')}</tbody></table>`:
   `<p class="empty">${S.dbState==='loading'?'Loading records…':'No participants yet. Enrol the first one after consent is signed.'}</p>`}</div>
-  <p style="color:var(--muted);font-size:.9rem;margin-top:12px">Scores: Knowledge 0–3 (K3 reverse-scored), Attitude 3–15, Practice 0–3, Total 3–21. A domain with a skipped item has no score, and neither does the total.</p>`;
+  <p style="color:var(--muted);font-size:.9rem;margin-top:12px">Scores: Knowledge 0–8 (K3 and K5 are false statements; "Don't know" scores 0), Attitude 5–25 (A5 reverse-scored), Practice 0–3, Total 5–36. A domain with a skipped item has no score, and neither does the total.</p>`;
 }
 function rowHTML(p){
   const st=t1Status(p), s0=p.t0?score(p.t0.ans):null, s1=p.t1?score(p.t1.ans):null;
@@ -270,18 +283,39 @@ function rowHTML(p){
   <td class="num">${s0?.total??'–'}</td><td class="num">${s1?.total??'–'}</td><td class="num">${sgn(ch)}</td><td>${acts}</td></tr>`;
 }
 
-/* questionnaire: step 0 = setup, 1..9 items, (10 = acceptability at T1), last = review */
+/* questionnaire: the step list differs by timepoint; the 16 KAP items are identical at T0 and T1 */
+function qsteps(tp){
+  const a=[{k:'setup'}];
+  if(tp==='t0') a.push({k:'x',x:PRIOR,label:{en:'Before the questions',hi:'प्रश्नों से पहले'}});
+  ITEMS.forEach(it=>a.push({k:'item',it}));
+  if(tp==='t1'){T1X.forEach(x=>a.push({k:'x',x,label:{en:'Follow-up',hi:'फ़ॉलो-अप'}}));a.push({k:'acc'});}
+  a.push({k:'review'});
+  return a;
+}
+function stepId(st){return st.k==='item'?st.it.id:st.k==='x'?st.x.id:st.k==='acc'?'ACC':null;}
 function startForm(code,tp){
-  S.form={code,tp,step:0,at:Date.now(),mode:tp==='t0'?'in-person':'phone',by:'',ans:{},acc:null};
+  S.form={code,tp,step:0,at:Date.now(),mode:tp==='t0'?'in-person':'phone',by:'',ans:{}};
   S.lang='en'; S.view='form'; render(); window.scrollTo(0,0);
 }
-function steps(){return 1+ITEMS.length+(S.form.tp==='t1'?1:0)+1;}
+function steps(){return qsteps(S.form.tp).length;}
+function ansLabel(id,v){
+  if(v===undefined) return '–';
+  if(v===SKIP) return '<span class="pill p-amber">Skipped</span>';
+  const it=ITEMS.find(x=>x.id===id);
+  if(it) return esc((OPTS[it.type].en.find(o=>String(o[0])===String(v))||[,''])[1]);
+  if(id==='ACC') return esc(v+' – '+ACCEPT.opts.en[v-1]);
+  return v==='Y'?'Yes':v==='N'?'No':esc(v);
+}
 function renderForm(){
-  const f=S.form, n=steps(), L=S.lang, p=S.parts[f.code];
+  const f=S.form, list=qsteps(f.tp), n=list.length, st=list[f.step], L=S.lang, p=S.parts[f.code];
   const tpName=f.tp==='t0'?'T0 baseline (before the video)':'T1 follow-up (48–72 h)';
   let body='';
   const langT=`<div class="lang" role="group" aria-label="Question language"><button data-act="lang" data-v="en" aria-pressed="${L==='en'}">English</button><button data-act="lang" data-v="hi" aria-pressed="${L==='hi'}" lang="hi">हिंदी</button></div>`;
-  if(f.step===0){
+  const nav=(v)=>`<div class="qnav"><button class="btn ghost" data-act="prev">Previous</button>
+      <button class="linkbtn" data-act="ans" data-v="${SKIP}" aria-pressed="${v===SKIP}">${v===SKIP?'Skipped. Tap an answer to change.':'Skip this question'}</button>
+      <button class="btn" data-act="next" ${v===undefined?'disabled':''}>Next</button></div>`;
+  const optBtns=(opts,v,numbered)=>opts.map(([val,lab],i)=>`<button class="opt" data-act="ans" data-v="${val}" aria-pressed="${String(v)===String(val)}" lang="${L}"><span class="k">${numbered?val:(i+1)}</span>${esc(lab)}</button>`).join('');
+  if(st.k==='setup'){
     let winNote='';
     if(f.tp==='t1'&&p?.t0){const h=(f.at-p.t0.at)/H; if(h<48||h>72) winNote=`<p class="note"><strong>Outside the 48–72 h window.</strong> This time is ${Math.round(h)} h after T0. You can still record it; the export flags it.</p>`;}
     body=`<div class="card"><h2>Before you start</h2>${winNote}
@@ -290,30 +324,27 @@ function renderForm(){
       <label class="f">Your initials<input id="f-by" maxlength="8" autocomplete="off" value="${esc(f.by)}" placeholder="e.g. SS"></label>
       <div class="f" style="display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.95rem">How it is being done<div class="seg" role="group" aria-label="Mode"><button data-act="mode" data-v="in-person" aria-pressed="${f.mode==='in-person'}">In person</button><button data-act="mode" data-v="phone" aria-pressed="${f.mode==='phone'}">By phone</button></div></div>
     </div>
-    <p style="color:var(--muted);margin:16px 0 0">Choose the language the participant prefers, using the switch above. Read each statement exactly as written. If the participant doesn't want to answer, use "Skip this question".</p>
+    <p style="color:var(--muted);margin:16px 0 0">Choose the language the participant prefers, using the switch above. Read each statement exactly as written. If the participant doesn't want to answer, use "Skip this question". Don't tell the participant whether an answer was right.</p>
     <div class="qnav"><span></span><button class="btn" data-act="next">Start questions</button></div></div>`;
-  } else if(f.step<=ITEMS.length){
-    const it=ITEMS[f.step-1], v=f.ans[it.id], opts=OPTS[it.type][L];
+  } else if(st.k==='item'){
+    const it=st.it, v=f.ans[it.id];
     body=`<div class="card"><p class="domain">${it.id} · ${DOM_NAME[it.dom][L]}</p><p class="qtext" lang="${L}">${esc(it[L])}</p>
-      <div class="opts ${it.type==='lik'?'':'two'}">${opts.map(([val,lab],i)=>`<button class="opt" data-act="ans" data-v="${val}" aria-pressed="${String(v)===String(val)}" lang="${L}"><span class="k">${it.type==='lik'?val:(i+1)}</span>${esc(lab)}</button>`).join('')}</div>
-      <div class="qnav"><button class="btn ghost" data-act="prev">Previous</button>
-      <button class="linkbtn" data-act="ans" data-v="${SKIP}" aria-pressed="${v===SKIP}">${v===SKIP?'Skipped. Tap an answer to change.':'Skip this question'}</button>
-      <button class="btn" data-act="next" ${v===undefined?'disabled':''}>Next</button></div></div>`;
-  } else if(f.tp==='t1'&&f.step===ITEMS.length+1){
-    const v=f.acc;
-    body=`<div class="card"><p class="domain">Acceptability</p><p class="qtext" lang="${L}">${esc(ACCEPT[L])}</p>
-      <div class="opts">${ACCEPT.opts[L].map((lab,i)=>`<button class="opt" data-act="acc" data-v="${i+1}" aria-pressed="${v===i+1}" lang="${L}"><span class="k">${i+1}</span>${esc(lab)}</button>`).join('')}</div>
-      <div class="qnav"><button class="btn ghost" data-act="prev">Previous</button>
-      <button class="linkbtn" data-act="acc" data-v="${SKIP}" aria-pressed="${v===SKIP}">${v===SKIP?'Skipped. Tap an answer to change.':'Skip this question'}</button>
-      <button class="btn" data-act="next" ${v===null?'disabled':''}>Next</button></div></div>`;
+      <div class="opts ${it.type==='lik'?'':it.type==='tf'?'three':'two'}">${optBtns(OPTS[it.type][L],v,it.type==='lik')}</div>${nav(v)}</div>`;
+  } else if(st.k==='x'){
+    const v=f.ans[st.x.id];
+    body=`<div class="card"><p class="domain">${st.label[L]}</p><p class="qtext" lang="${L}">${esc(st.x[L])}</p>
+      <div class="opts two">${optBtns(OPTS.yn[L],v,false)}</div>${nav(v)}</div>`;
+  } else if(st.k==='acc'){
+    const v=f.ans.ACC;
+    body=`<div class="card"><p class="domain">${L==='hi'?'उपयोगिता':'Acceptability'}</p><p class="qtext" lang="${L}">${esc(ACCEPT[L])}</p>
+      <div class="opts">${optBtns(ACCEPT.opts[L].map((lab,i)=>[i+1,lab]),v,true)}</div>${nav(v)}</div>`;
   } else {
     const sc=score(f.ans);
-    const lab=(it,v)=>v===SKIP?'<span class="pill p-amber">Skipped</span>':esc((OPTS[it.type].en.find(o=>String(o[0])===String(v))||[,''])[1]);
+    const row=(id,text)=>{const idx=list.findIndex(x=>stepId(x)===id);return `<tr><td>${id}</td><td>${esc(text)}</td><td>${ansLabel(id,f.ans[id])}</td><td><button class="linkbtn" data-act="goto" data-v="${idx}">Change</button></td></tr>`;};
+    const extra=list.filter(x=>x.k==='x'||x.k==='acc').map(x=>row(stepId(x),x.k==='acc'?ACCEPT.en:x.x.en)).join('');
     body=`<div class="card"><h2>Check and save</h2>
-    <div class="scores"><div><b>${sc.K??'–'}</b><span>Knowledge /3</span></div><div><b>${sc.A??'–'}</b><span>Attitude /15</span></div><div><b>${sc.P??'–'}</b><span>Practice /3</span></div><div><b>${sc.total??'–'}</b><span>Total /21</span></div></div>
-    <table class="review"><tbody>${ITEMS.map(it=>`<tr><td>${it.id}</td><td>${esc(it.en)}</td><td>${lab(it,f.ans[it.id])}</td><td><button class="linkbtn" data-act="goto" data-v="${ITEMS.indexOf(it)+1}">Change</button></td></tr>`).join('')}
-    ${f.tp==='t1'?`<tr><td>ACC</td><td>${esc(ACCEPT.en)}</td><td>${f.acc===SKIP?'<span class="pill p-amber">Skipped</span>':esc(f.acc+' – '+ACCEPT.opts.en[f.acc-1])}</td><td><button class="linkbtn" data-act="goto" data-v="${ITEMS.length+1}">Change</button></td></tr>`:''}
-    </tbody></table>
+    <div class="scores"><div><b>${sc.K??'–'}</b><span>Knowledge /8</span></div><div><b>${sc.A??'–'}</b><span>Attitude /25</span></div><div><b>${sc.P??'–'}</b><span>Practice /3</span></div><div><b>${sc.total??'–'}</b><span>Total /36</span></div></div>
+    <table class="review"><tbody>${ITEMS.map(it=>row(it.id,it.en)).join('')}${extra}</tbody></table>
     <div class="qnav"><button class="btn ghost" data-act="prev">Previous</button><button class="btn" data-act="save">Save ${f.tp.toUpperCase()}</button></div></div>`;
   }
   $app.innerHTML=`<div class="qhead"><div><div class="who">${esc(f.code)} · ${tpName}</div><div style="color:var(--muted);font-size:.9rem">Step ${f.step+1} of ${n}</div></div>${langT}</div>
@@ -349,10 +380,12 @@ function renderDetail(){
   <p><b>T0:</b> ${meta(p.t0)}<br><b>T1:</b> ${meta(p.t1)}${p.t0&&p.t1?` (${Math.round((p.t1.at-p.t0.at)/H)} h after T0)`:''}</p>
   <div class="tablewrap"><table><thead><tr><th>Item</th><th>Statement</th><th>T0</th><th>T1</th></tr></thead><tbody>
   ${ITEMS.map(it=>`<tr><td><b>${it.id}</b></td><td>${esc(it.en)}</td><td>${esc(lab(it,p.t0?.ans?.[it.id]))}</td><td>${esc(lab(it,p.t1?.ans?.[it.id]))}</td></tr>`).join('')}
-  <tr><td><b>K</b></td><td>Knowledge score /3</td><td>${s0?.K??'–'}</td><td>${s1?.K??'–'}</td></tr>
-  <tr><td><b>A</b></td><td>Attitude score /15</td><td>${s0?.A??'–'}</td><td>${s1?.A??'–'}</td></tr>
+  <tr><td><b>PRIOR</b></td><td>${esc(PRIOR.en)} (T0 only)</td><td>${ansLabel('PRIOR',p.t0?.ans?.PRIOR)}</td><td>–</td></tr>
+  ${T1X.map(x=>`<tr><td><b>${x.id}</b></td><td>${esc(x.en)} (T1 only)</td><td>–</td><td>${ansLabel(x.id,p.t1?.ans?.[x.id])}</td></tr>`).join('')}
+  <tr><td><b>K</b></td><td>Knowledge score /8</td><td>${s0?.K??'–'}</td><td>${s1?.K??'–'}</td></tr>
+  <tr><td><b>A</b></td><td>Attitude score /25</td><td>${s0?.A??'–'}</td><td>${s1?.A??'–'}</td></tr>
   <tr><td><b>P</b></td><td>Practice score /3</td><td>${s0?.P??'–'}</td><td>${s1?.P??'–'}</td></tr>
-  <tr><td><b>Total</b></td><td>Total KAP /21</td><td>${s0?.total??'–'}</td><td>${s1?.total??'–'}</td></tr>
+  <tr><td><b>Total</b></td><td>Total KAP /36</td><td>${s0?.total??'–'}</td><td>${s1?.total??'–'}</td></tr>
   <tr><td><b>ACC</b></td><td>Acceptability (1–5)</td><td>–</td><td>${p.t1?(p.t1.acc===SKIP?'Skipped':esc(p.t1.acc)):'–'}</td></tr>
   </tbody></table></div>
   ${p.exposure?`<h3>Exposure checklist</h3><p>Video seen: ${esc(p.exposure.video)} · QPL offered: ${esc(p.exposure.qplOffered)} · QPL accepted: ${esc(p.exposure.qplAccepted)} · Requested discussion: ${esc(p.exposure.discussion)} · by ${esc(p.exposure.by)}, ${fmtDT(p.exposure.at)}${p.exposure.notes?`<br>Notes: ${esc(p.exposure.notes)}`:''}</p>`:''}
@@ -406,13 +439,11 @@ async function saveDetails(btn){
 /* ---------- paper questionnaire ---------- */
 function renderPaper(){
   const L=OPTS.lik;
-  const itemRows=ITEMS.map(it=>{
-    let ans;
-    if(it.type==='tf') ans=`<span class="box"></span>True / सही<span class="box"></span>False / गलत`;
-    else if(it.type==='yn') ans=`<span class="box"></span>Yes / हाँ<span class="box"></span>No / नहीं`;
-    else ans=L.en.map(([v],i)=>`<span class="box"></span>${v}`).join('');
-    return `<tr><td><b>${it.id}</b></td><td>${esc(it.en)}<div class="hi" lang="hi">${esc(it.hi)}</div></td><td style="white-space:nowrap">${ans}</td></tr>`;
-  }).join('');
+  const ansCell=it=>it.type==='tf'?`<span class="box"></span>True / सही<span class="box"></span>False / गलत<span class="box"></span>Don't know / पता नहीं`
+    :it.type==='yn'?`<span class="box"></span>Yes / हाँ<span class="box"></span>No / नहीं`
+    :L.en.map(([v])=>`<span class="box"></span>${v}`).join('');
+  const rowsFor=dom=>ITEMS.filter(it=>it.dom===dom).map(it=>`<tr><td><b>${it.id}</b></td><td>${esc(it.en)}<div class="hi" lang="hi">${esc(it.hi)}</div></td><td style="white-space:nowrap">${ansCell(it)}</td></tr>`).join('');
+  const ynRow=x=>`<tr><td><b>${x.id}</b></td><td>${esc(x.en)}<div class="hi" lang="hi">${esc(x.hi)}</div></td><td style="white-space:nowrap"><span class="box"></span>Yes / हाँ<span class="box"></span>No / नहीं</td></tr>`;
   const likKey=L.en.map(([v,t],i)=>`${v} = ${t} / <span lang="hi">${L.hi[i][1]}</span>`).join('; ');
   const accRow=`<tr><td><b>ACC</b></td><td>${esc(ACCEPT.en)}<div class="hi" lang="hi">${esc(ACCEPT.hi)}</div><div style="font-size:13px;margin-top:4px">${ACCEPT.opts.en.map((t,i)=>`${i+1} = ${t}`).join('; ')}</div></td><td style="white-space:nowrap">${[1,2,3,4,5].map(v=>`<span class="box"></span>${v}`).join('')}</td></tr>`;
   $app.innerHTML=header('Paper questionnaire')+`
@@ -435,17 +466,20 @@ function renderPaper(){
       <tr><td colspan="3">Mobile: <span class="blank"></span>&nbsp; Relative's mobile: <span class="blank"></span></td></tr>
       <tr><td colspan="3">Age: <span class="blank" style="min-width:60px"></span> years &nbsp; Sex:<span class="box"></span>Male<span class="box"></span>Female<span class="box"></span>Other</td></tr>
     </tbody></table>
-    <p style="margin:14px 0 6px">Read each statement exactly as written. Tick one box. If the participant chooses not to answer, write "skip".</p>
+    <p style="margin:14px 0 6px">Read each statement exactly as written. Tick one box. If the participant chooses not to answer, write "skip". Don't tell the participant whether an answer was right.</p>
     <table>
       <thead><tr><th style="width:52px">Item</th><th>Statement / कथन</th><th>Answer</th></tr></thead>
       <tbody>
+        <tr class="sec"><td colspan="3">T0 only: before the questions</td></tr>
+        ${ynRow(PRIOR)}
         <tr class="sec"><td colspan="3">Knowledge / ज्ञान</td></tr>
-        ${itemRows.split('</tr>').slice(0,3).join('</tr>')}</tr>
+        ${rowsFor('K')}
         <tr class="sec"><td colspan="3">Attitude / दृष्टिकोण &nbsp; <span style="font-weight:400;font-size:13px">${likKey}</span></td></tr>
-        ${itemRows.split('</tr>').slice(3,6).join('</tr>')}</tr>
+        ${rowsFor('A')}
         <tr class="sec"><td colspan="3">Practice / intent / व्यवहार / इरादा</td></tr>
-        ${itemRows.split('</tr>').slice(6,9).join('</tr>')}</tr>
-        <tr class="sec"><td colspan="3">T1 only: acceptability</td></tr>
+        ${rowsFor('P')}
+        <tr class="sec"><td colspan="3">T1 only: follow-up</td></tr>
+        ${T1X.map(ynRow).join('')}
         ${accRow}
       </tbody>
     </table>
@@ -455,20 +489,21 @@ function renderPaper(){
 
 /* ---------- CSV ---------- */
 function buildCSV(){
-  const cols=['code','status','age','sex','t0_datetime','t0_mode','t0_by','t0_lang',...ITEMS.map(i=>'t0_'+i.id),'t0_K','t0_A','t0_P','t0_total','t0_missing',
+  const cols=['code','status','age','sex','t0_datetime','t0_mode','t0_by','t0_lang','t0_PRIOR',...ITEMS.map(i=>'t0_'+i.id),'t0_K','t0_A','t0_P','t0_total','t0_missing',
     'exp_video','exp_qpl_offered','exp_qpl_accepted','exp_requested_discussion','exp_notes',
-    't1_datetime','t1_hours_after_t0','t1_in_window','t1_mode','t1_by','t1_lang',...ITEMS.map(i=>'t1_'+i.id),'t1_K','t1_A','t1_P','t1_total','t1_missing','t1_acceptability',
+    't1_datetime','t1_hours_after_t0','t1_in_window','t1_mode','t1_by','t1_lang',...ITEMS.map(i=>'t1_'+i.id),'t1_K','t1_A','t1_P','t1_total','t1_missing','t1_RECALL','t1_QPLUSE','t1_acceptability',
     'chg_K','chg_A','chg_P','chg_total'];
-  const raw=(it,v)=>v===undefined?'':v===SKIP?'':it.type==='tf'?(v==='T'?1:0):it.type==='yn'?(v==='Y'?1:0):v;
+  const raw=(it,v)=>v===undefined?'':v===SKIP?'':it.type==='tf'?(v==='T'?1:v==='F'?0:9):it.type==='yn'?(v==='Y'?1:0):v;
+  const yn=v=>v==='Y'?1:v==='N'?0:'';
   const iso=ms=>ms?new Date(ms).toISOString():'';
   const q=v=>{v=v===null||v===undefined?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
   const rows=Object.values(S.parts).sort((a,b)=>a.code.localeCompare(b.code)).map(p=>{
     const s0=p.t0?score(p.t0.ans):{}, s1=p.t1?score(p.t1.ans):{}, e=p.exposure||{};
     const h=p.t0&&p.t1?(p.t1.at-p.t0.at)/H:null;
     const d=k=>(s0[k]!=null&&s1[k]!=null)?s1[k]-s0[k]:'';
-    return [p.code,p.status||'active',p.demo?.age??'',p.demo?.sex??'',iso(p.t0?.at),p.t0?.mode,p.t0?.by,p.t0?.lang,...ITEMS.map(i=>raw(i,p.t0?.ans?.[i.id])),s0.K,s0.A,s0.P,s0.total,p.t0?s0.missing:'',
+    return [p.code,p.status||'active',p.demo?.age??'',p.demo?.sex??'',iso(p.t0?.at),p.t0?.mode,p.t0?.by,p.t0?.lang,yn(p.t0?.ans?.PRIOR),...ITEMS.map(i=>raw(i,p.t0?.ans?.[i.id])),s0.K,s0.A,s0.P,s0.total,p.t0?s0.missing:'',
       e.video,e.qplOffered,e.qplAccepted,e.discussion,e.notes,
-      iso(p.t1?.at),h===null?'':h.toFixed(1),h===null?'':(h>=48&&h<=72?1:0),p.t1?.mode,p.t1?.by,p.t1?.lang,...ITEMS.map(i=>raw(i,p.t1?.ans?.[i.id])),s1.K,s1.A,s1.P,s1.total,p.t1?s1.missing:'',p.t1?(p.t1.acc===SKIP?'':p.t1.acc):'',
+      iso(p.t1?.at),h===null?'':h.toFixed(1),h===null?'':(h>=48&&h<=72?1:0),p.t1?.mode,p.t1?.by,p.t1?.lang,...ITEMS.map(i=>raw(i,p.t1?.ans?.[i.id])),s1.K,s1.A,s1.P,s1.total,p.t1?s1.missing:'',yn(p.t1?.ans?.RECALL),yn(p.t1?.ans?.QPLUSE),p.t1?(p.t1.acc===SKIP||p.t1.acc==null?'':p.t1.acc):'',
       d('K'),d('A'),d('P'),d('total')].map(q).join(',');
   });
   return [cols.join(','),...rows].join('\n');
@@ -480,7 +515,7 @@ function buildContactsCSV(){
 }
 function saveFile(name,text){const blob=new Blob(['\ufeff'+text],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);}
 function renderExport(){
-  $app.innerHTML=header('Export')+`<div class="card"><p>One row per participant. True/False items are coded 1 = True, 0 = False (raw answer, before reverse-scoring K3). Yes/No items are 1 = Yes, 0 = No. Skipped items are blank. Change = T1 minus T0.</p>
+  $app.innerHTML=header('Export')+`<div class="card"><p>One row per participant. Item columns hold the raw answer, before scoring. Knowledge: 1 = True, 0 = False, 9 = Don't know. Attitude: 1 to 5 as ticked (A5 is reversed only in the scores). Yes/No questions: 1 = Yes, 0 = No. Skipped items are blank. Domain and total columns are the scored values. Change = T1 minus T0.</p>
   <div class="row" style="margin:12px 0"><button class="btn" data-act="dl">Download research CSV</button><button class="btn ghost" data-act="sel">Select all text</button></div>
   <p style="margin-top:18px"><b>Contact list.</b> Names, UHID and phone numbers, linked by study code. Keep this file off GitHub and off shared drives that others can open.</p>
   <div class="row" style="margin:8px 0 14px"><button class="btn ghost" data-act="dlcontacts">Download contact list</button></div>
@@ -544,9 +579,10 @@ document.addEventListener('click',async ev=>{
       if(await put(S.sel,data)){toast('Checklist saved for '+S.sel);S.view='list';render();}break;}
     case 'lang': if(S.view==='form'&&f.step===0)keepFields(); S.lang=v;render();break;
     case 'mode': keepFields();f.mode=v;render();break;
-    case 'ans': {const it=ITEMS[f.step-1];f.ans[it.id]=v===SKIP?SKIP:(it.type==='lik'?Number(v):v);render();
+    case 'ans': {const st=qsteps(f.tp)[f.step], id=stepId(st);
+      const num=(st.k==='item'&&st.it.type==='lik')||st.k==='acc';
+      f.ans[id]=v===SKIP?SKIP:(num?Number(v):v);render();
       setTimeout(()=>{if(S.view==='form'&&S.form===f&&f.step<steps()-1){f.step++;render();}},v===SKIP?0:220);break;}
-    case 'acc': f.acc=v===SKIP?SKIP:Number(v);render();setTimeout(()=>{if(S.view==='form'&&S.form===f){f.step++;render();}},v===SKIP?0:220);break;
     case 'prev': if(f.step>0){f.step--;render();}break;
     case 'next':
       if(f.step===0){keepFields(); if(!f.by){toast('Enter your initials first.');document.getElementById('f-by')?.focus();break;} if(isNaN(f.at)){toast('Enter a valid date and time.');break;}}
@@ -555,7 +591,8 @@ document.addEventListener('click',async ev=>{
     case 'cancel': if(confirm('Leave without saving? The answers on this screen will be lost.')){S.view='list';S.form=null;render();}break;
     case 'save': {
       const p=S.parts[f.code]||{code:f.code,status:'active'};
-      const rec={at:f.at,mode:f.mode,by:f.by,lang:S.lang,ans:f.ans}; if(f.tp==='t1')rec.acc=f.acc;
+      const ans={...f.ans}; const rec={at:f.at,mode:f.mode,by:f.by,lang:S.lang,ans};
+      if(f.tp==='t1'){rec.acc=ans.ACC===undefined?null:ans.ACC;delete ans.ACC;}
       b.disabled=true;
       if(await put(f.code,{...p,[f.tp]:rec})){toast(`${f.tp.toUpperCase()} saved for ${f.code}`+(f.tp==='t0'?'. Now show the video and offer the QPL card.':''));S.view='list';S.form=null;render();}
       else b.disabled=false;
